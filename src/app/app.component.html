@@ -1,26 +1,36 @@
+<br>
 <div class="demo-button-container ">
   <mat-form-field appearance="outline" class="demo-button">
     <mat-label>Name</mat-label>
-    <input matInput placeholder=".">
+    <input  [formControl]="name" matInput placeholder="">
     <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
   </mat-form-field>
   <mat-form-field appearance="outline" class="demo-button amount-form-field">
     <mat-label>Amount</mat-label>
-    <input matInput type="number" class="example-right-align" placeholder="0">
-    <span matTextPrefix>$&nbsp;</span>
-    <span matTextSuffix>.00</span>
+    <input [formControl]="amount"
+    currencyMask
+    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
+      matInput 
+    type="text" 
+    class="example-right-align"
+    placeholder="0">
   </mat-form-field>
-  <mat-slide-toggle class="demo-button">Isento</mat-slide-toggle>
+  <mat-slide-toggle [formControl]="free" class="demo-button">Free</mat-slide-toggle>
+  <br>
   <button mat-raised-button (click)="addData()" class="demo-button">
     Add data
   </button>
+  <button mat-raised-button (click)="clearFields()">Clear fields</button>
   <button
-    mat-raised-button
-    [disabled]="!dataToDisplay.length"
-    (click)="removeData()"
-    class="demo-button">
-    Remove data
-  </button>
+  mat-raised-button
+  [disabled]="!dataToDisplay.length"
+  (click)="removeData()"
+  class="demo-button">
+  Remove select data
+</button>
+<button mat-raised-button (click)="clearTable()">Clear table</button>
+<button mat-raised-button (click)="update()">Update data</button>
+
 </div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
@@ -40,36 +50,42 @@
                     [aria-label]="checkboxLabel(row)">
       </mat-checkbox>
     </td>
+    <td mat-footer-cell *matFooterCellDef> Total </td>
   </ng-container>
 
   <!-- Position Column -->
   <ng-container matColumnDef="position">
     <th mat-header-cell *matHeaderCellDef> No. </th>
     <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+    <td mat-footer-cell *matFooterCellDef> {{total.value}} </td>
   </ng-container>
 
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Name </th>
     <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <td mat-footer-cell *matFooterCellDef>{{totalForPerson.value | currency}} for person</td>
   </ng-container>
 
   <!-- Amount Column -->
   <ng-container matColumnDef="amount">
     <th mat-header-cell *matHeaderCellDef> Amount </th>
-    <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.amount | currency}} </td>
+    <td mat-footer-cell *matFooterCellDef>{{totalAmount.value | currency}}</td>
   </ng-container>
 
   <!-- Balance Column -->
   <ng-container matColumnDef="balance">
     <th mat-header-cell *matHeaderCellDef> Balance </th>
-    <td mat-cell *matCellDef="let element"> {{element.balance}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.balance | currency}} </td>
+    <td mat-footer-cell *matFooterCellDef>{{totalBalance.value | currency}}</td>
   </ng-container>
 
   <!-- Current Balance Column -->
   <ng-container matColumnDef="current_balance">
     <th mat-header-cell *matHeaderCellDef> Current Balance </th>
-    <td mat-cell *matCellDef="let element"> {{element.current_balance}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.current_balance | currency}} </td>
+    <td mat-footer-cell *matFooterCellDef>{{totalCurrentBalance.value | currency}}</td>
   </ng-container>
 
   <!-- Free Column -->
@@ -82,10 +98,12 @@
         <mat-icon aria-hidden="false" aria-label="icon" fontIcon="close"></mat-icon>
       }
      </td>
-  </ng-container>
+     <td mat-footer-cell *matFooterCellDef>{{totalNoFree.value}} no free</td>
+    </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"
       (click)="selection.toggle(row)">
   </tr>
+  <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
 </table>

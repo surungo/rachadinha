@@ -28,20 +28,84 @@ export class AppComponent{
   title = 'rachadinha';
 
   
-  player: Player = { position: 1, name: 'Hydrogen', amount: 1.79, balance: 0.00, current_balance: 0.00,  free: true  };
+  player: Player = { position: 1, name: '', amount: 0, balance: 0, current_balance: 0,  free: false  };
   displayedColumns: string[] = ['select', 'position', 'name', 'current_balance', 'balance', 'amount', 'free'];
   dataToDisplay = [...PLAYER_DATA];
   dataSource = new ExampleDataSource(this.dataToDisplay);
   selection = new SelectionModel<Player>(true, []);
-  name = new FormControl(this.player.name);
-  amount = new FormControl(this.player.amount);
-  free = new FormControl(this.player.free);
+  position = new FormControl("");
+  name = new FormControl("");
+  amount = new FormControl(0);
+  free = new FormControl("");
+  total = new FormControl(0);
+  totalAmount = new FormControl(0);
+  totalForPerson = new FormControl(0);
+  totalNoFree = new FormControl(0);
+  totalCurrentBalance = new FormControl(0);
+  totalBalance = new FormControl(0);
+
+  constructor(){
+    //this.clearTable()
+    this.update();
+  }
+
+  getTotal() {
+    this.total.setValue(this.dataToDisplay.length)
+    return this.total.value;
+  }
+  
+  getTotalNoFree() {
+    this.totalNoFree.setValue(this.dataToDisplay.map(t => t.free).reduce((acc, value) => (!value)?acc + 1:acc, 0));
+    return this.totalNoFree.value;
+  }
+  
+  getTotalForPerson(totalAmount: Number,totalNoFree: Number) {
+    this.totalForPerson.setValue(Number(totalAmount)/Number(totalNoFree));
+    return this.totalForPerson.value;
+  }
+  
+  getTotalCurrentBalance() {
+    return this.dataToDisplay.map(t => t.current_balance).reduce((acc, value) => acc + value, 0);
+  }
+  
+  getTotalBalance() {
+    return this.dataToDisplay.map(t => t.balance).reduce((acc, value) => acc + value, 0);
+  }
+  
+  getTotalAmount() {
+    this.totalAmount.setValue(this.dataToDisplay.map(t => t.amount).reduce((acc, value) => acc + value, 0));
+    return this.totalAmount.value;
+  }
+
+  updateBalance(totalForPerson: Number) {
+    this.dataToDisplay.forEach((value,index)=>{
+      if(value.free){
+        value.balance=value.amount;
+      }else{
+        value.balance=value.amount-Number(totalForPerson);
+      }
+    });
+
+  }
+
+  update(){
+    let total = this.getTotal();
+    let totalAmount = this.getTotalAmount();
+    let totalNoFree =this.getTotalNoFree();
+    let totalForPerson = this.getTotalForPerson(Number(totalAmount), Number(totalNoFree));
+    this.updateBalance(Number(totalForPerson));  
+    this.getTotalBalance();
+  }
+
   
   addData() {
-    debugger;
     let count=1;
     let position=0;
-    let name='Hydrogen';
+    let name=String(this.name.value);
+    if(name.trim() == ""){
+      alert("Preencha um nome");
+      return;
+    }
     while(position==0){
       position=count;
       this.dataToDisplay.forEach((value,index)=>{
@@ -62,10 +126,11 @@ export class AppComponent{
     let pplayer: Player = Object.create(this.player);
     pplayer.position=position;
     pplayer.name=name;
-    
+    pplayer.amount=Number(this.amount.value);
+    pplayer.free=Boolean(this.free.value);
     this.dataToDisplay = [...this.dataToDisplay, pplayer];
     this.dataSource.setData(this.dataToDisplay);
-    
+    this.update();
   }
 
   removeData() {
@@ -77,6 +142,7 @@ export class AppComponent{
     //this.dataToDisplay = this.dataToDisplay.slice(0, -1);
     this.dataSource.setData(this.dataToDisplay);
     this.selection.clear();
+    this.update();
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -102,6 +168,29 @@ export class AppComponent{
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
+
+  clearTable() {
+    this.dataToDisplay=[];
+    this.dataSource.setData(this.dataToDisplay);
+  }
+
+  clearFields(){
+    this.position.setValue("");
+    this.name.setValue("");
+    this.amount.setValue(0);
+    this.free.setValue("");
+  }
+
+  loadData(row?: Player) {
+    if (row) {
+      this.position.setValue(String(row.position));
+      this.name.setValue(row.name);
+      this.amount.setValue(row.amount);
+      this.free.setValue(String(row.free));
+    }
+  }  
+  
+  
 }
 
 
