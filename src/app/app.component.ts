@@ -1,22 +1,25 @@
-import { Component } from '@angular/core';
+import {LiveAnnouncer} from '@angular/cdk/a11y';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable, ReplaySubject} from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Player } from './model/player';
 import { FormControl } from '@angular/forms';
+import {MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 const PLAYER_DATA: Player[] = [
-  {position: 1,  name: 'Hydrogen',  amount:  1.79, balance: 0.00, current_balance: 0.00, free: true},
-  {position: 2,  name: 'Helium',    amount:  4.06, balance: 0.00, current_balance: 0.00,  free: false},
-  {position: 3,  name: 'Lithium',   amount:  6.41, balance: 0.00, current_balance: 0.00,  free: false},
-  {position: 4,  name: 'Beryllium', amount:  9.22, balance: 0.00, current_balance: 0.00,  free: false},
-  {position: 5,  name: 'Boron',     amount: 10.81, balance: 0.00, current_balance: 0.00,  free: false},
-  {position: 6,  name: 'Carbon',    amount: 12.07, balance: 0.00, current_balance: 0.00,  free: false},
-  {position: 7,  name: 'Nitrogen',  amount: 14.67, balance: 0.00, current_balance: 0.00,  free: false},
-  {position: 8,  name: 'Oxygen',    amount: 15.94, balance: 0.00, current_balance: 0.00,  free: false},
-  {position: 9,  name: 'Fluorine',  amount: 18.94, balance: 0.00, current_balance: 0.00,  free: false},
-  {position: 10, name: 'Neon',      amount: 20.17, balance: 0.00, current_balance: 0.00,  free: false},
+  {position: 1,  name: 'Hydrogen',  amount: 500.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00, free: true, players: []},
+  {position: 2,  name: 'Helium',    amount: 700.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  {position: 3,  name: 'Lithium',   amount: 300.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  {position: 4,  name: 'Beryllium', amount: 100.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  {position: 5,  name: 'Boron',     amount:   0.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  //{position: 6,  name: 'Carbon',    amount: 12.07, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  //{position: 7,  name: 'Nitrogen',  amount: 14.67, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  //{position: 8,  name: 'Oxygen',    amount: 15.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  //{position: 9,  name: 'Fluorine',  amount: 18.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  //{position: 10, name: 'Neon',      amount: 20.17, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
 ];
 
 @Component({
@@ -24,14 +27,13 @@ const PLAYER_DATA: Player[] = [
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent{
+export class AppComponent  implements AfterViewInit{
   title = 'rachadinha';
 
-  
-  player: Player = { position: 1, name: '', amount: 0, balance: 0, current_balance: 0,  free: false  };
-  displayedColumns: string[] = ['select', 'position', 'name', 'current_balance', 'balance', 'amount', 'free'];
+  player: Player = { position: 1, name: '', amount: 0, balance: 0, positive_current_balance: 0.00, current_balance: 0,  free: false, players: []  };
+  displayedColumns: string[] = ['select',  'position', 'name', 'positive_current_balance', 'current_balance', 'balance', 'amount', 'free'];
   dataToDisplay = [...PLAYER_DATA];
-  dataSource = new ExampleDataSource(this.dataToDisplay);
+  dataSource = new MatTableDataSource(this.dataToDisplay);
   selection = new SelectionModel<Player>(true, []);
   position = new FormControl("");
   name = new FormControl("");
@@ -44,11 +46,28 @@ export class AppComponent{
   totalCurrentBalance = new FormControl(0);
   totalBalance = new FormControl(0);
 
-  constructor(){
+  constructor(private _liveAnnouncer: LiveAnnouncer){
     //this.clearTable()
     this.update();
   }
+  
+  @ViewChild(MatSort)
+  sort!: MatSort;
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+  }
 
+  announceSortChange(sortState: Sort) {
+    // This example uses English messages. If your application supports
+    // multiple language, you would internationalize these strings.
+    // Furthermore, you can customize the message to add additional
+    // details about the values being sorted.
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+  }
   getTotal() {
     this.total.setValue(this.dataToDisplay.length)
     return this.total.value;
@@ -86,6 +105,12 @@ export class AppComponent{
       }
     });
 
+  }
+  updateCurrentBalance(){
+    this.dataToDisplay.forEach((value,index)=>{
+      value.current_balance=value.balance;   
+      value.positive_current_balance=Math.sqrt(Math.pow(Number(value.current_balance),2)) ;   
+    });
   }
 
   update(){
@@ -129,7 +154,7 @@ export class AppComponent{
     pplayer.amount=Number(this.amount.value);
     pplayer.free=Boolean(this.free.value);
     this.dataToDisplay = [...this.dataToDisplay, pplayer];
-    this.dataSource.setData(this.dataToDisplay);
+    this.dataSource.data = this.dataToDisplay;
     this.update();
   }
 
@@ -140,7 +165,7 @@ export class AppComponent{
       });
     });
     //this.dataToDisplay = this.dataToDisplay.slice(0, -1);
-    this.dataSource.setData(this.dataToDisplay);
+    this.dataSource.data=this.dataToDisplay;
     this.selection.clear();
     this.update();
   }
@@ -171,7 +196,7 @@ export class AppComponent{
 
   clearTable() {
     this.dataToDisplay=[];
-    this.dataSource.setData(this.dataToDisplay);
+    this.dataSource.data=this.dataToDisplay;
   }
 
   clearFields(){
@@ -190,26 +215,5 @@ export class AppComponent{
     }
   }  
   
-  
-}
-
-
-class ExampleDataSource extends DataSource<Player> {
-  private _dataStream = new ReplaySubject<Player[]>();
-
-  constructor(initialData: Player[]) {
-    super();
-    this.setData(initialData);
-  }
-
-  connect(): Observable<Player[]> {
-    return this._dataStream;
-  }
-
-  disconnect() {}
-
-  setData(data: Player[]) {
-    this._dataStream.next(data);
-  }
   
 }
