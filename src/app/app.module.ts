@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSortModule} from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxCurrencyDirective } from 'ngx-currency';
 
@@ -29,6 +30,7 @@ import { NgxCurrencyDirective } from 'ngx-currency';
     MatInputModule,
     MatFormFieldModule,
     MatSlideToggleModule,
+    MatSortModule,
     ReactiveFormsModule,
     NgxCurrencyDirective
   ],
