@@ -1,6 +1,6 @@
 export class Player {
     name!: string ;
-    position!: number;
+    idplayer!: number;
     amount!: number;
     balance!: number;
     current_balance!: number;    
