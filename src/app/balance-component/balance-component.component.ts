@@ -1,5 +1,5 @@
 import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable, ReplaySubject} from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -30,11 +30,11 @@ const PLAYER_DATA: Player[] = [
 })
 export class BalanceComponentComponent   implements AfterViewInit{
   title = 'rachadinha';
-
-  player: Player = { idplayer: 1, name: '', amount: 0, balance: 0, positive_current_balance: 0.00, current_balance: 0,  free: false  };
+  @Input() item = ''; 
+  @Input() balance_player: Player = { idplayer: 1, name: '', amount: 0, balance: 0, positive_current_balance: 0.00, current_balance: 0,  free: false  };
   displayedColumns: string[] = ['select',  'idplayer', 'name', 'positive_current_balance', 'balance', 'amount', 'free'];
-  dataToDisplay = [...PLAYER_DATA];
-  dataSource = new MatTableDataSource(this.dataToDisplay);
+  balance_dataToDisplay = [...PLAYER_DATA];
+  @Input() balance_dataSource = new MatTableDataSource(this.balance_dataToDisplay);
   selection = new SelectionModel<Player>(true, []);
   idplayer = new FormControl("");
   name = new FormControl("");
@@ -48,7 +48,7 @@ export class BalanceComponentComponent   implements AfterViewInit{
   totalBalance = new FormControl(0);
 
   constructor(private _liveAnnouncer: LiveAnnouncer,private storageService: LocalStorageService){
-    this.dataSource = new MatTableDataSource(this.storageService.get("dataPlayer"));
+    //this.balance_dataSource = new MatTableDataSource(this.storageService.get("dataPlayer"));
     //this.clearTable()
    
     this.update();
@@ -59,7 +59,7 @@ export class BalanceComponentComponent   implements AfterViewInit{
   @ViewChild(MatSort)
   sort!: MatSort;
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
+    this.balance_dataSource.sort = this.sort;
   }
 
   simulation(){
@@ -92,12 +92,12 @@ export class BalanceComponentComponent   implements AfterViewInit{
     }
   }
   getTotal() {
-    this.total.setValue(this.dataToDisplay.length)
+    this.total.setValue(this.balance_dataToDisplay.length)
     return this.total.value;
   }
   
   getTotalNoFree() {
-    this.totalNoFree.setValue(this.dataToDisplay.map(t => t.free).reduce((acc, value) => (!value)?acc + 1:acc, 0));
+    this.totalNoFree.setValue(this.balance_dataToDisplay.map(t => t.free).reduce((acc, value) => (!value)?acc + 1:acc, 0));
     return this.totalNoFree.value;
   }
   
@@ -107,20 +107,20 @@ export class BalanceComponentComponent   implements AfterViewInit{
   }
   
   getTotalCurrentBalance() {
-    return this.dataToDisplay.map(t => t.current_balance).reduce((acc, value) => acc + value, 0);
+    return this.balance_dataToDisplay.map(t => t.current_balance).reduce((acc, value) => acc + value, 0);
   }
   
   getTotalBalance() {
-    return this.dataToDisplay.map(t => t.balance).reduce((acc, value) => acc + value, 0);
+    return this.balance_dataToDisplay.map(t => t.balance).reduce((acc, value) => acc + value, 0);
   }
   
   getTotalAmount() {
-    this.totalAmount.setValue(this.dataToDisplay.map(t => t.amount).reduce((acc, value) => acc + value, 0));
+    this.totalAmount.setValue(this.balance_dataToDisplay.map(t => t.amount).reduce((acc, value) => acc + value, 0));
     return this.totalAmount.value;
   }
 
   updateBalance(totalForPerson: Number) {
-    this.dataToDisplay.forEach((value,index)=>{
+    this.balance_dataToDisplay.forEach((value,index)=>{
       if(value.free){
         value.balance=value.amount;
       }else{
@@ -130,7 +130,7 @@ export class BalanceComponentComponent   implements AfterViewInit{
 
   }
   updateCurrentBalance(){
-    this.dataToDisplay.forEach((value,index)=>{
+    this.balance_dataToDisplay.forEach((value,index)=>{
       value.current_balance=value.balance;   
       value.positive_current_balance=Math.sqrt(Math.pow(Number(value.current_balance),2)) ;   
     });
@@ -156,46 +156,46 @@ export class BalanceComponentComponent   implements AfterViewInit{
     }
     while(idplayer==0){
       idplayer=count;
-      this.dataToDisplay.forEach((value,index)=>{
+      this.balance_dataToDisplay.forEach((value,index)=>{
         if(value.idplayer==count){
           idplayer=0;
         }
       });
       count++;
     }
-    this.dataToDisplay.forEach((value,index)=>{
+    this.balance_dataToDisplay.forEach((value,index)=>{
       if(value.name==name){
         name=name+idplayer;
       }
     });
   
    /* const randomElementIndex = Math.floor(Math.random() * PLAYER_DATA.length);
-    this.dataToDisplay = [...this.dataToDisplay, PLAYER_DATA[randomElementIndex]];*/
-    let pplayer: Player = Object.create(this.player);
+    this.balance_dataToDisplay = [...this.balance_dataToDisplay, PLAYER_DATA[randomElementIndex]];*/
+    let pplayer: Player = Object.create(this.balance_player);
     pplayer.idplayer=idplayer;
     pplayer.name=name;
     pplayer.amount=Number(this.amount.value);
     pplayer.free=Boolean(this.free.value);
-    this.dataToDisplay = [...this.dataToDisplay, pplayer];
-    this.dataSource.data = this.dataToDisplay;
+    this.balance_dataToDisplay = [...this.balance_dataToDisplay, pplayer];
+    this.balance_dataSource.data = this.balance_dataToDisplay;
     this.update();
   }
 
   removeData() {
     this.selection.selected.forEach((svalue,sindex)=>{
-      this.dataToDisplay.forEach((value,index)=>{
-        if(value.idplayer==svalue.idplayer) this.dataToDisplay.splice(index,1);
+      this.balance_dataToDisplay.forEach((value,index)=>{
+        if(value.idplayer==svalue.idplayer) this.balance_dataToDisplay.splice(index,1);
       });
     });
-    //this.dataToDisplay = this.dataToDisplay.slice(0, -1);
-    this.dataSource.data=this.dataToDisplay;
+    //this.balance_dataToDisplay = this.balance_dataToDisplay.slice(0, -1);
+    this.balance_dataSource.data=this.balance_dataToDisplay;
     this.selection.clear();
     this.update();
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataToDisplay.length;
+    const numRows = this.balance_dataToDisplay.length;
     return numSelected === numRows;
   }
 
@@ -206,7 +206,7 @@ export class BalanceComponentComponent   implements AfterViewInit{
       return;
     }
 
-    this.selection.select(...this.dataToDisplay);
+    this.selection.select(...this.balance_dataToDisplay);
   }
 
   /** The label for the checkbox on the passed row */
@@ -218,8 +218,8 @@ export class BalanceComponentComponent   implements AfterViewInit{
   }
 
   clearTable() {
-    this.dataToDisplay=[];
-    this.dataSource.data=this.dataToDisplay;
+    this.balance_dataToDisplay=[];
+    this.balance_dataSource.data=this.balance_dataToDisplay;
   }
 
   clearFields(){

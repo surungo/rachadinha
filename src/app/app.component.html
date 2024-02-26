@@ -32,14 +32,20 @@ v24021611
 <button mat-raised-button (click)="simulation()">Simulation</button>-->
 
 </div>
-
+<div>
+  idplayer: {{app_player.idplayer}}
+  <br>Nome: {{app_player.name}}
+  <br>amount: {{app_player.amount}}
+  <br>free: {{app_player.free}}
+  <br>{{currentItem}}
+</div> 
 <mat-tab-group>
-  <mat-tab label="Refund"> refund </mat-tab>
   <mat-tab label="Balance">
     <br>
     <br>
-    <app-balance-component></app-balance-component>
+    <app-balance-component [balance_dataSource]="app_dataSource" [item]="currentItem" [balance_player]="app_player" ></app-balance-component>
   </mat-tab>
+  <mat-tab label="Refund"> refund </mat-tab>
 
 </mat-tab-group>
 

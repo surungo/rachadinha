@@ -20,7 +20,6 @@ export class LocalStorageService {
   }
 
   get(key: string): any {
-    debugger;
     if (this.storage) {
       return JSON.parse(this.storage.getItem(key)||'[]');
     }
