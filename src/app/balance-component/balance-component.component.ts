@@ -7,19 +7,20 @@ import { Player } from '../model/player';
 import { FormControl } from '@angular/forms';
 import {MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { LocalStorageService } from '../local-storage.service';
 
 
 const PLAYER_DATA: Player[] = [
-  {idplayer: 1,  name: 'Hydrogen',  amount: 500.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00, free: true, players: new Array},
-  {idplayer: 2,  name: 'Helium',    amount: 700.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
-  {idplayer: 3,  name: 'Lithium',   amount: 300.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
-  {idplayer: 4,  name: 'Beryllium', amount: 100.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
-  {idplayer: 5,  name: 'Boron',     amount:   0.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
-  //{idplayer: 6,  name: 'Carbon',    amount: 12.07, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
-  //{idplayer: 7,  name: 'Nitrogen',  amount: 14.67, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
-  //{idplayer: 8,  name: 'Oxygen',    amount: 15.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
-  //{idplayer: 9,  name: 'Fluorine',  amount: 18.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
-  //{idplayer: 10, name: 'Neon',      amount: 20.17, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, players: []},
+  {idplayer: 1,  name: 'Hydrogen',  amount: 500.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00, free: true},
+  {idplayer: 2,  name: 'Helium',    amount: 700.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+  {idplayer: 3,  name: 'Lithium',   amount: 300.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+  {idplayer: 4,  name: 'Beryllium', amount: 100.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+  {idplayer: 5,  name: 'Boron',     amount:   0.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+  //{idplayer: 6,  name: 'Carbon',    amount: 12.07, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+  //{idplayer: 7,  name: 'Nitrogen',  amount: 14.67, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+  //{idplayer: 8,  name: 'Oxygen',    amount: 15.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+  //{idplayer: 9,  name: 'Fluorine',  amount: 18.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+  //{idplayer: 10, name: 'Neon',      amount: 20.17, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
 ];
 
 @Component({
@@ -30,7 +31,7 @@ const PLAYER_DATA: Player[] = [
 export class BalanceComponentComponent   implements AfterViewInit{
   title = 'rachadinha';
 
-  player: Player = { idplayer: 1, name: '', amount: 0, balance: 0, positive_current_balance: 0.00, current_balance: 0,  free: false, players: []  };
+  player: Player = { idplayer: 1, name: '', amount: 0, balance: 0, positive_current_balance: 0.00, current_balance: 0,  free: false  };
   displayedColumns: string[] = ['select',  'idplayer', 'name', 'positive_current_balance', 'balance', 'amount', 'free'];
   dataToDisplay = [...PLAYER_DATA];
   dataSource = new MatTableDataSource(this.dataToDisplay);
@@ -46,9 +47,10 @@ export class BalanceComponentComponent   implements AfterViewInit{
   totalCurrentBalance = new FormControl(0);
   totalBalance = new FormControl(0);
 
-  constructor(private _liveAnnouncer: LiveAnnouncer){
+  constructor(private _liveAnnouncer: LiveAnnouncer,private storageService: LocalStorageService){
+    this.dataSource = new MatTableDataSource(this.storageService.get("dataPlayer"));
     //this.clearTable()
-
+   
     this.update();
     //this.solver(0);
     
@@ -71,23 +73,11 @@ export class BalanceComponentComponent   implements AfterViewInit{
   }
 
   addPlayerById(id1: Number,id2: Number){
-    this.dataToDisplay.forEach(value1 => {
-      if(value1.idplayer==id1){
-        this.dataToDisplay.forEach(value2 => {
-          if(value2.idplayer==id2){
-            value1.players = [...value1.players, value2];
-          }
-        })  
-      }
-    });
+   
   }
 
   solver(level: Number){
-    this.dataToDisplay.forEach((value1,index1)=>{
-      value1.players.forEach((value2,index2)=>{
-        value1.current_balance+=value2.current_balance;
-      });
-    });
+    
   }
 
   announceSortChange(sortState: Sort) {
