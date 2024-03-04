@@ -1,15 +1,5 @@
 
-<div>
-  <p>
-    Today's item: {{item}}
-  </p>
-  idplayer: {{balance_player.idplayer}}
-  <br>Nome: {{balance_player.name}}
-  <br>amount: {{balance_player.amount}}
-  <br>free: {{balance_player.free}}
-  
-</div> 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="announceSortChange($event)">
+  <table mat-table [dataSource]="businessService.balance_dataSource()" class="mat-elevation-z8" matSort (matSortChange)="announceSortChange($event)">
     
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">

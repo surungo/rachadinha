@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import {MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { LocalStorageService } from '../local-storage.service';
+import { BusinessService } from '../service/business.service';
 
 
 const PLAYER_DATA: Player[] = [
@@ -30,11 +31,10 @@ const PLAYER_DATA: Player[] = [
 })
 export class BalanceComponentComponent   implements AfterViewInit{
   title = 'rachadinha';
-  @Input() item = ''; 
-  @Input() balance_player: Player = { idplayer: 1, name: '', amount: 0, balance: 0, positive_current_balance: 0.00, current_balance: 0,  free: false  };
+  balance_player: Player = { idplayer: 1, name: '', amount: 0, balance: 0, positive_current_balance: 0.00, current_balance: 0,  free: false  };
   displayedColumns: string[] = ['select',  'idplayer', 'name', 'positive_current_balance', 'balance', 'amount', 'free'];
   balance_dataToDisplay = [...PLAYER_DATA];
-  @Input() balance_dataSource = new MatTableDataSource(this.balance_dataToDisplay);
+  balance_dataSource = new MatTableDataSource(this.balance_dataToDisplay);
   selection = new SelectionModel<Player>(true, []);
   idplayer = new FormControl("");
   name = new FormControl("");
@@ -47,13 +47,10 @@ export class BalanceComponentComponent   implements AfterViewInit{
   totalCurrentBalance = new FormControl(0);
   totalBalance = new FormControl(0);
 
-  constructor(private _liveAnnouncer: LiveAnnouncer,private storageService: LocalStorageService){
-    //this.balance_dataSource = new MatTableDataSource(this.storageService.get("dataPlayer"));
-    //this.clearTable()
-   
-    this.update();
-    //this.solver(0);
-    
+  constructor(
+    private _liveAnnouncer: LiveAnnouncer,
+    public businessService: BusinessService
+    ){
   }
   
   @ViewChild(MatSort)
@@ -61,30 +58,8 @@ export class BalanceComponentComponent   implements AfterViewInit{
   ngAfterViewInit(): void {
     this.balance_dataSource.sort = this.sort;
   }
-
-  simulation(){
-    this.addPlayerById(2,4);
-    this.addPlayerById(4,2);
-    this.addPlayerById(1,3);
-    this.addPlayerById(1,5);
-    this.addPlayerById(3,1);
-    this.addPlayerById(5,1);
-
-  }
-
-  addPlayerById(id1: Number,id2: Number){
-   
-  }
-
-  solver(level: Number){
-    
-  }
-
+ 
   announceSortChange(sortState: Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
