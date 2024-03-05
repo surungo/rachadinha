@@ -1,4 +1,4 @@
-v24021611
+v0.2.0 b2403052000 
 
 <div class="demo-button-container ">
   <mat-form-field appearance="outline" class="demo-button">
@@ -19,7 +19,9 @@ v24021611
   <mat-slide-toggle [formControl]="free" class="demo-button">Free</mat-slide-toggle>
   <br>
   <button mat-raised-button (click)="addData()" class="demo-button">Add data</button>
+  <button mat-raised-button (click)="businessService.removeItem()">Remove select itens</button>
   <button mat-raised-button (click)="businessService.removeData()">Clear table</button>
+  <button mat-raised-button (click)="clearFields()">Clear fields</button>
   <!--  
   <button mat-raised-button (click)="clearFields()">Clear fields</button>
   <button mat-raised-button[disabled]="!dataToDisplay.length"
