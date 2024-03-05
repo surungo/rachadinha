@@ -6,7 +6,6 @@ export class Player {
     current_balance!: number;    
     positive_current_balance!: number;    
     free!: boolean;
-    players!:Player[];
-
+    
     constructor() {}
 }
