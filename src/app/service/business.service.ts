@@ -25,8 +25,7 @@ export class BusinessService{
     ];
     
   nmDataPlayer: string = "dataPlayer";
-  app_player: Player = { idplayer: 1, name: '', amount: 0, balance: 0, positive_current_balance: 0.00, current_balance: 0,  free: false };
-  public player = signal<Player>(this.app_player); 
+  public player = signal<Player>(new Player()); 
   public balance_dataToDisplay = signal<Player[]>([...this.PLAYER_DATA]);
   public balance_dataSource = signal(new MatTableDataSource(this.balance_dataToDisplay()));
   public balance_total = signal(0);
@@ -74,7 +73,7 @@ export class BusinessService{
     this.balance_dataToDisplay.set([...this.balance_dataToDisplay(), this.player()]);
     this.balance_dataSource.set(new MatTableDataSource(this.balance_dataToDisplay()));
     this.storageService.set(this.nmDataPlayer,this.balance_dataToDisplay());
-    this.updateBalance();
+    this.loadData();
   }
   
   removeData(){
@@ -93,6 +92,7 @@ export class BusinessService{
     this.balance_dataSource().data=this.balance_dataToDisplay();
     this.selection().clear();
     this.storageService.set(this.nmDataPlayer,this.balance_dataToDisplay());
+    this.loadData();
     
   }
 
@@ -129,6 +129,8 @@ export class BusinessService{
       }else{
         value.balance=value.amount-Number(this.totalForPerson());
       }
+      let valueAux=Number(value.balance);
+      value.positive_balance=Math.sqrt(Math.pow(valueAux,2));
     });
     this.getTotalBalance();
   }

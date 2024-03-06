@@ -49,9 +49,9 @@
     </ng-container>
   
     <!-- Positive Current Balance Column -->
-    <ng-container matColumnDef="positive_current_balance">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_current_balance"> Players </th>
-      <td mat-cell *matCellDef="let element">PB</td>
+    <ng-container matColumnDef="positive_balance">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_balance"> Positive Balance </th>
+      <td mat-cell *matCellDef="let element">{{element.positive_balance | currency}}</td>
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
   
