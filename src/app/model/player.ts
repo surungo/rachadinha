@@ -4,7 +4,7 @@ export class Player {
     amount!: number;
     balance!: number;
     current_balance!: number;    
-    positive_current_balance!: number;    
+    positive_balance!: number;    
     free!: boolean;
     
     constructor() {}

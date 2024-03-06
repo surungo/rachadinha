@@ -12,7 +12,7 @@ import { BusinessService } from '../service/business.service';
 })
 export class BalanceComponentComponent   implements AfterViewInit{
   
-  displayedColumns: string[] = ['select',  'idplayer', 'name', 'amount', 'free', 'balance', 'positive_current_balance'];
+  displayedColumns: string[] = ['select', 'name', 'amount', 'balance', 'free', 'positive_balance',  'idplayer'];
   totalCurrentBalance = new FormControl(0);
   
   constructor(
