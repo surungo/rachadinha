@@ -1,0 +1,84 @@
+
+  <table mat-table [dataSource]="businessService.balance_dataSource()" class="mat-elevation-z8" matSort (matSortChange)="announceSortChange($event)">
+    
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                      [checked]="businessService.selection().hasValue() && isAllSelected()"
+                      [indeterminate]="businessService.selection().hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? businessService.selection().toggle(row) : null"
+                      [checked]="businessService.selection().isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> Total </td>
+    </ng-container>
+  
+    <!-- Idplayer Column -->
+    <ng-container matColumnDef="idplayer">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idplayer"> No. </th>
+      <td mat-cell *matCellDef="let element"> {{element.idplayer}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{this.businessService.balance_total()}} </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      <td mat-footer-cell *matFooterCellDef>{{this.businessService.totalForPerson() | currency}} for person</td>
+    </ng-container>
+  
+    <!-- Amount Column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by amount"> Amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.amount | currency}} </td>
+      <td mat-footer-cell *matFooterCellDef>{{this.businessService.totalAmount() | currency}}</td>
+    </ng-container>
+  
+    <!-- Balance Column -->
+    <ng-container matColumnDef="balance">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance"> Balance </th>
+      <td mat-cell *matCellDef="let element"> {{element.balance | currency}} </td>
+      <td mat-footer-cell *matFooterCellDef>{{this.businessService.totalBalance() | currency}}</td>
+    </ng-container>
+  
+    <!-- Positive Current Balance Column -->
+    <ng-container matColumnDef="positive_balance">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_balance"> Positive Balance </th>
+      <td mat-cell *matCellDef="let element">{{element.positive_balance | currency}}</td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+  
+    <!-- Current Balance Column -->
+    <ng-container matColumnDef="current_balance">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by current_balance"> Current Balance </th>
+      <td mat-cell *matCellDef="let element"> {{element.current_balance | currency}} </td>
+      <td mat-footer-cell *matFooterCellDef>{{totalCurrentBalance.value | currency}}</td>
+    </ng-container>
+  
+    <!-- Free Column -->
+    <ng-container matColumnDef="free">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by free"> Free </th>
+      <td mat-cell *matCellDef="let element"> 
+        @if (element.free) {
+          <mat-icon aria-hidden="false" aria-label="icon" fontIcon="done"></mat-icon>
+        } @else {
+          <mat-icon aria-hidden="false" aria-label="icon" fontIcon="close"></mat-icon>
+        }
+       </td>
+       <td mat-footer-cell *matFooterCellDef>{{this.businessService.totalNoFree()}} no free</td>
+      </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (click)="businessService.selection().toggle(row)">
+    </tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+  </table>
+  
