@@ -3,6 +3,7 @@ import { Player } from "../model/player";
 import { MatTableDataSource } from "@angular/material/table";
 import { LocalStorageService } from "../local-storage.service";
 import { SelectionModel } from "@angular/cdk/collections";
+import { Refund } from "../model/refund";
 
 
 @Injectable({
@@ -26,6 +27,7 @@ export class BusinessService{
     
   nmDataPlayer: string = "dataPlayer";
   public player = signal<Player>(new Player()); 
+  public refund = signal<Refund>(new Refund()); 
   public balance_dataToDisplay = signal<Player[]>([...this.PLAYER_DATA]);
   public balance_dataSource = signal(new MatTableDataSource(this.balance_dataToDisplay()));
   public balance_total = signal(0);
@@ -43,8 +45,8 @@ export class BusinessService{
     this.balance_dataToDisplay.set(this.storageService.get(this.nmDataPlayer));
     this.balance_dataSource.set(new MatTableDataSource(this.balance_dataToDisplay()));
     this.updateBalance();
-  }    
-
+  }
+  
   addData(value: Player){
     let count=1;
     let idplayer=0;
@@ -69,6 +71,10 @@ export class BusinessService{
         this.player().name=this.player().name+idplayer;
       }
     });
+    debugger;
+    let refund_aux = new Refund();
+    refund_aux.payee=this.player();
+    this.refund.set(refund_aux);
     
     this.balance_dataToDisplay.set([...this.balance_dataToDisplay(), this.player()]);
     this.balance_dataSource.set(new MatTableDataSource(this.balance_dataToDisplay()));
