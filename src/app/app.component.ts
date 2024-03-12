@@ -1,7 +1,6 @@
 import { Component, effect } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Player } from './model/player';
-import { MatTableDataSource } from '@angular/material/table';
 import { BusinessService } from './service/business.service';
 
 @Component({
@@ -15,12 +14,12 @@ export class AppComponent{
     public businessService: BusinessService
     ){}
    
-  app_dataToDisplay: Player[]=new Array<Player>();
+  
   name = new FormControl("");
   amount = new FormControl(0);
   free = new FormControl("");
   app_player: Player = new Player();
-  app_dataSource = new MatTableDataSource(this.app_dataToDisplay);
+  
 
   addData(){
     let name=String(this.name.value);
