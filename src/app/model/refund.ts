@@ -5,7 +5,7 @@ export class Refund {
     idrefund!: number;
     payer!: Player;    
     payee!: Player;
-    balance!: number;
+    amount!: number;
 
     constructor() {}    
 }
