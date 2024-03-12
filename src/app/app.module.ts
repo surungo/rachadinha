@@ -15,12 +15,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxCurrencyDirective } from 'ngx-currency';
-import { BalanceComponentComponent } from './balance-component/balance-component.component';
+import { BalanceComponentComponent } from './component/balance/balance.component';
+import { RefundComponent } from './component/refund/refund.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BalanceComponentComponent
+    BalanceComponentComponent,
+    RefundComponent
   ],
   imports: [
     BrowserModule,

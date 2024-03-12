@@ -16,12 +16,15 @@ v0.2.1 b2403062100
     class="example-right-align"
     placeholder="0">
   </mat-form-field>
-  <mat-slide-toggle [formControl]="free" class="demo-button">Free</mat-slide-toggle>
+  <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
   <br>
-  <button mat-raised-button (click)="addData()" class="demo-button">Add data</button>
+  <button mat-raised-button (click)="addData()">Add data</button>
   <button mat-raised-button (click)="businessService.removeItem()">Remove select itens</button>
   <button mat-raised-button (click)="businessService.removeData()">Clear table</button>
   <button mat-raised-button (click)="clearFields()">Clear fields</button>
+
+  <button mat-raised-button (click)="businessService.updateBalance()">Update Balance</button>  
+  <button mat-raised-button (click)="businessService.updateRefund()">Update Refund</button>  
   <!--  
   <button mat-raised-button (click)="clearFields()">Clear fields</button>
   <button mat-raised-button[disabled]="!dataToDisplay.length"
@@ -30,17 +33,35 @@ v0.2.1 b2403062100
   Remove select data
 </button>
 <button mat-raised-button (click)="clearTable()">Clear table</button>
-<button mat-raised-button (click)="updateCurrentBalance()">Update Current Balance</button>
-<button mat-raised-button (click)="simulation()">Simulation</button>-->
+
+-->
 
 </div>
 <mat-tab-group>
-  <mat-tab label="Balance">
+  
+  <mat-tab label="Refund"> 
+ 
+    <br>
+    <br>
+    <app-refund-component />
+ 
     <br>
     <br>
     <app-balance-component />
+    
   </mat-tab>
-  <mat-tab label="Refund"> refund </mat-tab>
+  
+  <mat-tab label="Balance">
+    
+    <br>
+    <br>
+    <app-balance-component />
+    
+    <br>
+    <br>
+    <app-refund-component />
+
+  </mat-tab>
 
 </mat-tab-group>
 

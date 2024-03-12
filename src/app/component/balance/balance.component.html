@@ -1,22 +1,19 @@
-<div>
-  teste<br>
-  {{this.businessService.refund().payee().name}}
-</div>
+
   <table mat-table [dataSource]="businessService.balance_dataSource()" class="mat-elevation-z8" matSort (matSortChange)="announceSortChange($event)">
     
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                      [checked]="businessService.selection().hasValue() && isAllSelected()"
-                      [indeterminate]="businessService.selection().hasValue() && !isAllSelected()"
+                      [checked]="businessService.balance_selection().hasValue() && isAllSelected()"
+                      [indeterminate]="businessService.balance_selection().hasValue() && !isAllSelected()"
                       [aria-label]="checkboxLabel()">
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row">
         <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? businessService.selection().toggle(row) : null"
-                      [checked]="businessService.selection().isSelected(row)"
+                      (change)="$event ? businessService.balance_selection().toggle(row) : null"
+                      [checked]="businessService.balance_selection().isSelected(row)"
                       [aria-label]="checkboxLabel(row)">
         </mat-checkbox>
       </td>
@@ -51,20 +48,20 @@
       <td mat-footer-cell *matFooterCellDef>{{this.businessService.totalBalance() | currency}}</td>
     </ng-container>
   
-    <!-- Positive Current Balance Column -->
+   <!-- Current Balance Column -->
+   <ng-container matColumnDef="current_balance">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance">Current Balance </th>
+    <td mat-cell *matCellDef="let element"> {{element.current_balance | currency}} </td>
+    <td mat-footer-cell *matFooterCellDef>-</td>
+  </ng-container>
+
+  <!-- Positive Current Balance Column -->
     <ng-container matColumnDef="positive_balance">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_balance"> Positive Balance </th>
       <td mat-cell *matCellDef="let element">{{element.positive_balance | currency}}</td>
-      <td mat-footer-cell *matFooterCellDef></td>
+      <td mat-footer-cell *matFooterCellDef>0</td>
     </ng-container>
-  
-    <!-- Current Balance Column -->
-    <ng-container matColumnDef="current_balance">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by current_balance"> Current Balance </th>
-      <td mat-cell *matCellDef="let element"> {{element.current_balance | currency}} </td>
-      <td mat-footer-cell *matFooterCellDef>{{totalCurrentBalance.value | currency}}</td>
-    </ng-container>
-  
+
     <!-- Free Column -->
     <ng-container matColumnDef="free">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by free"> Free </th>
@@ -80,7 +77,7 @@
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-        (click)="businessService.selection().toggle(row)">
+        (click)="businessService.balance_selection().toggle(row)">
     </tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
   </table>
