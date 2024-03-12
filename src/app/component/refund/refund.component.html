@@ -16,55 +16,62 @@
                 [checked]="businessService.refund_selection().isSelected(row)" [aria-label]="checkboxLabel(row)">
             </mat-checkbox>
         </td>
-        <td mat-footer-cell *matFooterCellDef> Total </td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!--  amount Column -->
     <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Amount"> Amount </th>
         <td mat-cell *matCellDef="let element"> {{element.amount  | currency}} </td>
-        <td mat-footer-cell *matFooterCellDef> {{0}} </td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Idplayer Column -->
     <ng-container matColumnDef="idplayer_payee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idplayer"> No. Payee </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idplayer_payee"> No. Payee </th>
         <td mat-cell *matCellDef="let element"> {{element.payee.idplayer}} </td>
-        <td mat-footer-cell *matFooterCellDef> {{0}} </td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name_payee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Name Payee </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name_payee"> Payee </th>
         <td mat-cell *matCellDef="let element"> {{element.payee.name}} </td>
-        <td mat-footer-cell *matFooterCellDef>{{0 | currency}} for person</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Amount Column -->
     <ng-container matColumnDef="amount_payee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by amount"> Amount Payee </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by amount_payee"> Amount Payee </th>
         <td mat-cell *matCellDef="let element"> {{element.payee.amount | currency}} </td>
-        <td mat-footer-cell *matFooterCellDef>{{0 | currency}}</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Balance Column -->
     <ng-container matColumnDef="balance_payee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance"> Balance Payee </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance_payee"> Balance Payee </th>
         <td mat-cell *matCellDef="let element"> {{element.payee.balance | currency}} </td>
-        <td mat-footer-cell *matFooterCellDef>{{0 | currency}}</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Positive Current Balance Column -->
     <ng-container matColumnDef="positive_balance_payee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_balance"> Positive Payee
-            Balance </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_balance_payee"> Positive Balance Payee </th>
         <td mat-cell *matCellDef="let element">{{element.payee.positive_balance | currency}}</td>
-        <td mat-footer-cell *matFooterCellDef>0</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
+
+   <!-- Current Balance Column -->
+   <ng-container matColumnDef="current_balance_payee">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by current_balance_payee">Current Balance Payee</th>
+    <td mat-cell *matCellDef="let element"> {{element.payee.current_balance | currency}} </td>
+    <td mat-footer-cell *matFooterCellDef>-</td>
+  </ng-container>
+
 
     <!-- Free Column -->
     <ng-container matColumnDef="free_payee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by free"> Free  Payee</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by free_payee"> Free  Payee</th>
         <td mat-cell *matCellDef="let element">
             @if (element.payee.free) {
             <mat-icon aria-hidden="false" aria-label="icon" fontIcon="done"></mat-icon>
@@ -72,49 +79,56 @@
             <mat-icon aria-hidden="false" aria-label="icon" fontIcon="close"></mat-icon>
             }
         </td>
-        <td mat-footer-cell *matFooterCellDef>0 no free</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Idplayer Column -->
     <ng-container matColumnDef="idplayer_payer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idplayer"> No. Payer </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idplayer_payer"> No. Payer </th>
         <td mat-cell *matCellDef="let element"> {{element.payer.idplayer}} </td>
-        <td mat-footer-cell *matFooterCellDef> {{0}} </td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name_payer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Payer </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name_payer"> Payer </th>
         <td mat-cell *matCellDef="let element"> {{element.payer.name}} </td>
-        <td mat-footer-cell *matFooterCellDef>{{0 | currency}} for person</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
 
     <!-- Amount Column -->
     <ng-container matColumnDef="amount_payer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by amount"> Amount Payer </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by amount_payer"> Amount Payer </th>
         <td mat-cell *matCellDef="let element"> {{element.payer.amount | currency}} </td>
-        <td mat-footer-cell *matFooterCellDef>{{0 | currency}}</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Balance Column -->
     <ng-container matColumnDef="balance_payer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance"> Balance Payer </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance_payer"> Balance Payer </th>
         <td mat-cell *matCellDef="let element"> {{element.payer.balance | currency}} </td>
-        <td mat-footer-cell *matFooterCellDef>{{0 | currency}}</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
     <!-- Positive Current Balance Column -->
     <ng-container matColumnDef="positive_balance_payer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_balance"> Positive Payer
-            Balance </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_balance_payer"> Positive Balance Payer </th>
         <td mat-cell *matCellDef="let element">{{element.payer.positive_balance | currency}}</td>
-        <td mat-footer-cell *matFooterCellDef>0</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
+
+        <!-- Positive Current Balance Column -->
+        <ng-container matColumnDef="current_balance_payer">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by current_balance_payer"> Current Balance Payer </th>
+            <td mat-cell *matCellDef="let element">{{element.payer.current_balance | currency}}</td>
+            <td mat-footer-cell *matFooterCellDef> - </td>
+        </ng-container>
+    
 
     <!-- Free Column -->
     <ng-container matColumnDef="free_payer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by free"> Free  Payer</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by free_payer"> Free  Payer</th>
         <td mat-cell *matCellDef="let element">
             @if (element.payer.free) {
             <mat-icon aria-hidden="false" aria-label="icon" fontIcon="done"></mat-icon>
@@ -122,7 +136,7 @@
             <mat-icon aria-hidden="false" aria-label="icon" fontIcon="close"></mat-icon>
             }
         </td>
-        <td mat-footer-cell *matFooterCellDef>0 no free</td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
 

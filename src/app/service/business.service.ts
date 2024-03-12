@@ -37,6 +37,8 @@ export class BusinessService {
   public totalForPerson = signal(0);
   public totalBalance = signal(0);
 
+  clonedBalance:Player[]=[];
+  recapBalance:Player[]=[];
 
   REFUND_DATA: Refund[] = [
     { 'idrefund': 0, 'payee': this.PLAYER_DATA[0], 'payer': this.PLAYER_DATA[1], 'amount': 0 }
@@ -68,7 +70,6 @@ export class BusinessService {
   }
 
   addData(value: Player) {
-    debugger;
     let count = 1;
     let idplayer = 0;
     this.player.set(value);
@@ -101,10 +102,11 @@ export class BusinessService {
     // add new balance storage
     this.addBalance(this.player());
     this.updateBalance();
+  /*
     if (this.storageService.get(this.nmDataPlayer).length > 1) {
       this.updateRefund();
     }
-
+  */
     this.loadData();
   }
 
@@ -117,16 +119,20 @@ export class BusinessService {
     this.loadRefundData();
     this.restartCurrentBalance();
     let refund = this.newRefund();
-
-    let count=0;
-    
+    // case 1
     debugger;
+    let solver=1;
+    let count=0;
     let player0 = this.getPlayerEmpty();
-    while(count<this.balance_dataToDisplay().length) {
-      this.updatePositiveBalance();
-      this.sortBalance();
-      let player1 = this.getPlayerCadidate(player0);
-      if(player1.idplayer==0)return;
+    this.clonedBalance = this.balance_dataToDisplay().slice();
+
+    while(count<this.clonedBalance.length) {
+      this.clonedBalance=this.updatePositiveBalance(this.clonedBalance);
+      this.clonedBalance=this.sortBalance(this.clonedBalance);
+      let player1 = this.getPlayerCadidate(player0, solver);
+      if(player1.idplayer==0){
+        continue;
+      }
       if(player1.balance>0){
         refund.payee=player1;
       }
@@ -134,8 +140,10 @@ export class BusinessService {
         refund.payer=player1;
       }
 
-      let player2 = this.getPlayerCadidate(player1);
-      if(player2.idplayer==0)return;
+      let player2 = this.getPlayerCadidate(player1, solver);
+      if(player2.idplayer==0){
+        continue;
+      }
       if(player2.balance>0){
         refund.payee=player2;
       }
@@ -143,15 +151,19 @@ export class BusinessService {
         refund.payer=player2;
       }
       
-      refund.amount=refund.payee.current_balance+refund.payer.current_balance;
+      if(refund.payee.current_balance>=refund.payer.current_balance){
+        refund.amount=this.convertToPositiveValue(refund.payer.current_balance);
+      }else{
+
+      }
       refund.payee.current_balance=refund.payee.balance-refund.amount;
       refund.payer.current_balance=refund.payer.balance+refund.amount;
       refund.payee.current_balance=refund.payee.current_balance<0.00?0:refund.payee.current_balance;
       refund.payer.current_balance=refund.payer.current_balance<0.00?0:refund.payer.current_balance;
-      this.updatePositiveBalance();
-      this.saveBalance();
+      this.clonedBalance=this.updatePositiveBalance(this.clonedBalance);
       this.addRefund(refund);
       refund = this.newRefund();
+      count++;
     }
   }
   getPlayerEmpty() {
@@ -162,19 +174,20 @@ export class BusinessService {
     player.positive_balance=0;
     return player;
   }
-  
-  getPlayerCadidate(player: Player) {
+
+  getPlayerCadidate(player: Player, solver: Number) {
     
-    for(let player_loop of this.balance_dataToDisplay()){
+    for(let player_loop of this.clonedBalance){
       let exists=false;
       
+      // to be a candidate the id has to be different
       if(player.idplayer==player_loop.idplayer){
         exists=true;
         continue;
       }   
 
+      // to be a candidate the current balance has to be oppositional
       if(player_loop.current_balance > 0 ) {
-        // current balance is possible
         if( player.current_balance > 0 ){
           exists=true;
           continue;
@@ -186,47 +199,44 @@ export class BusinessService {
         } 
       }
 
+      // to be a candidate the current balance has to exists
       if(player_loop.current_balance == 0){
         exists=true;
         continue;
       }
       
       for(let refund_loop of this.refund_dataToDisplay()){
-        // exists for id
-        if((refund_loop.payee.idplayer==player_loop.idplayer 
-          && refund_loop.payee.current_balance==0)
-          || (refund_loop.payer.idplayer==player_loop.idplayer
-          && refund_loop.payer.current_balance==0)){
+        // to be a candidate, if they have same ID, they need have current balance
+        if(refund_loop.payee.idplayer==player_loop.idplayer 
+          && 
+          (  refund_loop.payee.current_balance==0
+          || refund_loop.payer.current_balance==0)){
             exists=true;
             continue;
         }
-
-        if(player.current_balance > 0 ) {
-          // current balance is possible
-          if( refund_loop.payee.current_balance > 0 ){
+      }
+      switch(solver){
+        case 1:
+          if(player.idplayer>0 && player_loop.positive_balance!=player.positive_balance){
             exists=true;
-            continue;
-          }                   
-        }else{
-          if( refund_loop.payer.current_balance < 0 ){
-            exists=true;
-            continue;
-          } 
-        }
-        
+          }
+          break;
       }
         
       if(!exists){
+        this.recapBalance.push(player_loop);
+        this.clonedBalance  = this.clonedBalance.filter((e, i) => e.idplayer !== player_loop.idplayer); 
         return player_loop;
       }
     }
-    return new Player();
+    return this.getPlayerEmpty();
 
   }
 
-  sortBalance() {
-    this.balance_dataToDisplay().sort((a, b) => a.balance - b.balance); 
-    this.balance_dataToDisplay().sort((a, b) => b.positive_balance - a.positive_balance); 
+  sortBalance(balance_dataToDisplay : Player[]) {
+    balance_dataToDisplay.sort((a, b) => a.balance - b.balance); 
+    balance_dataToDisplay.sort((a, b) => b.positive_balance - a.positive_balance); 
+    return balance_dataToDisplay;
   }
   newRefund() {
     let count = 1;
@@ -329,16 +339,21 @@ export class BusinessService {
         value.balance = value.amount - Number(this.totalForPerson());
       }
       let valueAux = Number(value.current_balance);
-      value.positive_balance = Math.sqrt(Math.pow(valueAux, 2));
+      value.positive_balance = this.convertToPositiveValue(valueAux);
     });
     this.getTotalBalance();
   }
 
-  updatePositiveBalance() {
-    this.balance_dataToDisplay().forEach((value, index) => {
+  updatePositiveBalance(balance_dataToDisplay: Player[]) {
+    balance_dataToDisplay.forEach((value, index) => {
       let valueAux = Number(value.current_balance);
-      value.positive_balance = Math.sqrt(Math.pow(valueAux, 2));
+      value.positive_balance = this.convertToPositiveValue(valueAux);
     });
+    return balance_dataToDisplay;
+  }
+
+  convertToPositiveValue(value: number): number {
+    return Math.sqrt(Math.pow(value, 2))
   }
 
   restartCurrentBalance() {
@@ -352,7 +367,7 @@ export class BusinessService {
         value.current_balance = value.amount - Number(this.totalForPerson());
       }
       let valueAux = Number(value.balance);
-      value.positive_balance = Math.sqrt(Math.pow(valueAux, 2));
+      value.positive_balance = this.convertToPositiveValue(valueAux);
     });
     this.getTotalBalance();
   }
