@@ -41,12 +41,15 @@ export class AppComponent{
     this.businessService.removeData();
   }
 
-  btnUpdateBalance() {
-    this.businessService.updateBalance();
+  btnClearFields(){
+    this.name.setValue("");
+    this.amount.setValue(0);
+    this.free.setValue("");
   }
 
-  btnUpdatePositiveBalance() {
-    this.businessService.balance_dataToDisplay.set(this.businessService.updatePositiveBalance(this.businessService.balance_dataToDisplay()));
+
+  btnUpdateBalance() {
+    this.businessService.updateBalance();
   }
 
   btnRestartCurrentBalance() {
@@ -57,9 +60,8 @@ export class AppComponent{
     this.businessService.updateRefund()
   }  
 
-  btnClearFields(){
-    this.name.setValue("");
-    this.amount.setValue(0);
-    this.free.setValue("");
+  btnAddPlayerTest(){
+    this.businessService.addPlayerTest();
   }
+
 }

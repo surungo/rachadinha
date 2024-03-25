@@ -11,19 +11,19 @@ import { Refund } from "../model/refund";
 })
 
 export class BusinessService {
-  public version = signal("v0.4.0 b24-03-13.09");
+  public version = signal("v0.5.0 b24-03-25.17");
 
   PLAYER_DATA: Player[] = [
-    { idplayer: 1, name: 'Hydrogen', amount: 500.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: true, recap: false },
-    { idplayer: 2, name: 'Helium', amount: 700.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
-    //{idplayer: 3,  name: 'Lithium',   amount: 300.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
-    //{idplayer: 4,  name: 'Beryllium', amount: 100.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
-    //{idplayer: 5,  name: 'Boron',     amount:   0.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
-    //{idplayer: 6,  name: 'Carbon',    amount: 12.07, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
-    //{idplayer: 7,  name: 'Nitrogen',  amount: 14.67, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
-    //{idplayer: 8,  name: 'Oxygen',    amount: 15.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
-    //{idplayer: 9,  name: 'Fluorine',  amount: 18.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
-    //{idplayer: 10, name: 'Neon',      amount: 20.17, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
+    { idplayer: 1, name: 'Hydrogen',  amount: 650.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
+    { idplayer: 2, name: 'Helium',    amount: 350.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
+    { idplayer: 3, name: 'Lithium',   amount: 700.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
+    { idplayer: 4, name: 'Beryllium', amount: 400.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
+    { idplayer: 5, name: 'Boron',     amount: 400.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
+    //{idplayer: 6,  name: 'Carbon',    amount: 12.07, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
+    //{idplayer: 7,  name: 'Nitrogen',  amount: 14.67, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
+    //{idplayer: 8,  name: 'Oxygen',    amount: 15.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
+    //{idplayer: 9,  name: 'Fluorine',  amount: 18.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
+    //{idplayer: 10, name: 'Neon',      amount: 20.17, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
   ];
 
   nmDataPlayer: string = "dataPlayer";
@@ -437,5 +437,11 @@ export class BusinessService {
     this.totalBalance.set(this.balance_dataToDisplay().map(t => t.balance).reduce((acc, value) => acc + value, 0));
     this.saveBalance();
   }
+
+  addPlayerTest(){
+    this.balance_dataToDisplay.set([...this.PLAYER_DATA]);
+    this.saveBalance();
+  }
+
 
 }
