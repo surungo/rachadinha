@@ -13,15 +13,13 @@ export class AppComponent{
   constructor(
     public businessService: BusinessService
     ){}
-   
   
   name = new FormControl("");
   amount = new FormControl(0);
   free = new FormControl("");
   app_player: Player = new Player();
   
-
-  addData(){
+  btnAddData(){
     let name=String(this.name.value);
     if(name.trim() == ""){
       alert("Preencha um nome");
@@ -32,10 +30,34 @@ export class AppComponent{
     this.app_player.amount=Number(this.amount.value);
     this.app_player.free=Boolean(this.free.value);
     this.businessService.addData(this.app_player);
-    this.clearFields();
+    this.btnClearFields();
   }
 
-  clearFields(){
+  btnRemoveItem() {
+    this.businessService.removeItem()
+  }
+
+  btnRemoveData() {
+    this.businessService.removeData();
+  }
+
+  btnUpdateBalance() {
+    this.businessService.updateBalance();
+  }
+
+  btnUpdatePositiveBalance() {
+    this.businessService.balance_dataToDisplay.set(this.businessService.updatePositiveBalance(this.businessService.balance_dataToDisplay()));
+  }
+
+  btnRestartCurrentBalance() {
+    this.businessService.restartCurrentBalance()
+  }
+
+  btnUpdateRefund() {
+    this.businessService.updateRefund()
+  }  
+
+  btnClearFields(){
     this.name.setValue("");
     this.amount.setValue(0);
     this.free.setValue("");

@@ -36,3 +36,11 @@
   .mat-mdc-table-sticky {
     border-top: 1px solid #e0e0e0;
   }
+
+  .fixed-bottom {
+    background-color: #494249;
+    position: fixed;
+    width: 100%;
+    bottom: 0px; /* Sets the sticky toolbar to be on top */
+    z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+}
