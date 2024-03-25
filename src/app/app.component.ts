@@ -13,7 +13,6 @@ export class AppComponent{
   constructor(
     public businessService: BusinessService
     ){}
-   
   
   name = new FormControl("");
   amount = new FormControl(0);

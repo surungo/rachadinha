@@ -6,6 +6,7 @@ export class Player {
     positive_balance!: number;    
     current_balance!: number;
     free!: boolean;
+    recap!: boolean;
     
     constructor() {}
 }

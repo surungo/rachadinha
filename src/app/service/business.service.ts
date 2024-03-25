@@ -10,11 +10,12 @@ import { Refund } from "../model/refund";
   providedIn: 'root',
 })
 
-
 export class BusinessService {
+  public version = signal("v0.4.0 b24-03-13.09");
+
   PLAYER_DATA: Player[] = [
-    { idplayer: 1, name: 'Hydrogen', amount: 500.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: true },
-    { idplayer: 2, name: 'Helium', amount: 700.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false },
+    { idplayer: 1, name: 'Hydrogen', amount: 500.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: true, recap: false },
+    { idplayer: 2, name: 'Helium', amount: 700.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
     //{idplayer: 3,  name: 'Lithium',   amount: 300.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
     //{idplayer: 4,  name: 'Beryllium', amount: 100.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
     //{idplayer: 5,  name: 'Boron',     amount:   0.00, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false},
@@ -36,9 +37,6 @@ export class BusinessService {
   public totalNoFree = signal(0);
   public totalForPerson = signal(0);
   public totalBalance = signal(0);
-
-  clonedBalance:Player[]=[];
-  recapBalance:Player[]=[];
 
   REFUND_DATA: Refund[] = [
     { 'idrefund': 0, 'payee': this.PLAYER_DATA[0], 'payer': this.PLAYER_DATA[1], 'amount': 0 }
@@ -118,53 +116,94 @@ export class BusinessService {
     this.clearRefund();
     this.loadRefundData();
     this.restartCurrentBalance();
+    this.balance_dataToDisplay.set(this.resetRecapAll(this.balance_dataToDisplay()));
+        
     let refund = this.newRefund();
     // case 1
     debugger;
     let solver=1;
     let count=0;
-    let player0 = this.getPlayerEmpty();
-    this.clonedBalance = this.balance_dataToDisplay().slice();
+    let player1Arr : Player[] = [];
+    let player2Arr : Player[] = [];
+    while(solver<3) {
+      while(this.balance_dataToDisplay().filter((e, i) => e.recap).length < this.balance_dataToDisplay().length &&
+            count<this.balance_dataToDisplay().length) {
 
-    while(count<this.clonedBalance.length) {
-      this.clonedBalance=this.updatePositiveBalance(this.clonedBalance);
-      this.clonedBalance=this.sortBalance(this.clonedBalance);
-      let player1 = this.getPlayerCadidate(player0, solver);
-      if(player1.idplayer==0){
-        continue;
-      }
-      if(player1.balance>0){
-        refund.payee=player1;
-      }
-      if(player1.balance<0){
-        refund.payer=player1;
-      }
+        this.balance_dataToDisplay.set(this.updatePositiveBalance(this.balance_dataToDisplay()));
+        this.balance_dataToDisplay.set(this.sortBalance(this.balance_dataToDisplay()));
+        
+        player1Arr = this.getPlayerCadidate([], solver);
+        if(player1Arr.length<1){
+          continue;
+        }
+        
+        player2Arr = this.getPlayerCadidate(player1Arr, solver);
+        if(player2Arr.length<1){
+          player1Arr=[];
+          continue;
+        }
+        
+        for(let player1 of player1Arr){
+          for(let player2 of player2Arr){
+            if(player1.balance>0){
+              refund.payee=player1;
+            }
+            if(player1.balance<0){
+              refund.payer=player1;
+            }
+            
+            if(player2.balance>0){
+              refund.payee=player2;
+            }
+            if(player2.balance<0){
+              refund.payer=player2;
+            }
+            
+            if(refund.payee.current_balance>=refund.payer.current_balance){
+              refund.amount=this.convertToPositiveValue(refund.payer.current_balance);
+            }else{
 
-      let player2 = this.getPlayerCadidate(player1, solver);
-      if(player2.idplayer==0){
-        continue;
+            }
+            refund.payee.current_balance=refund.payee.balance-refund.amount;
+            refund.payer.current_balance=refund.payer.balance+refund.amount;
+            refund.payee.current_balance=refund.payee.current_balance<0.00?0:refund.payee.current_balance;
+            refund.payer.current_balance=refund.payer.current_balance<0.00?0:refund.payer.current_balance;
+            this.balance_dataToDisplay.set(this.updatePositiveBalance(this.balance_dataToDisplay()));
+            this.addRefund(refund);
+            refund = this.newRefund();
+            count++;
+          }
+        } 
+        player2Arr=[]; 
       }
-      if(player2.balance>0){
-        refund.payee=player2;
-      }
-      if(player2.balance<0){
-        refund.payer=player2;
-      }
-      
-      if(refund.payee.current_balance>=refund.payer.current_balance){
-        refund.amount=this.convertToPositiveValue(refund.payer.current_balance);
-      }else{
-
-      }
-      refund.payee.current_balance=refund.payee.balance-refund.amount;
-      refund.payer.current_balance=refund.payer.balance+refund.amount;
-      refund.payee.current_balance=refund.payee.current_balance<0.00?0:refund.payee.current_balance;
-      refund.payer.current_balance=refund.payer.current_balance<0.00?0:refund.payer.current_balance;
-      this.clonedBalance=this.updatePositiveBalance(this.clonedBalance);
-      this.addRefund(refund);
-      refund = this.newRefund();
-      count++;
+      count=0;
+      solver++;
+      this.balance_dataToDisplay.set(this.resetRecap(this.balance_dataToDisplay()));
     }
+  }
+  sumPositiveBalance(myNums: Player[]) {
+    let sum = 0;
+    myNums.forEach( player => {
+      sum += player.positive_balance;
+    });
+    return sum;
+  }
+  sumCurrentBalance(myNums: Player[]) {
+    let sum = 0;
+    myNums.forEach( player => {
+      sum += player.current_balance;
+    });
+    return sum;
+  }
+  resetRecapAll(balance_dataToDisplay: Player[]): Player[] {
+    balance_dataToDisplay.forEach((value, index) => value.recap=false);
+    return balance_dataToDisplay;
+  }
+  resetRecap(balance_dataToDisplay: Player[]): Player[] {
+    balance_dataToDisplay
+      .filter((e, i) => e.current_balance > 0 )
+      .forEach((e, i) => e.recap=false);
+     return balance_dataToDisplay; 
   }
   getPlayerEmpty() {
     let player = new Player();
@@ -175,25 +214,28 @@ export class BusinessService {
     return player;
   }
 
-  getPlayerCadidate(player: Player, solver: Number) {
-    
-    for(let player_loop of this.clonedBalance){
+  getPlayerCadidate(player1Arr: Player[], solver: Number): Player[] {
+    let player2Arr : Player[] = []; 
+    for(let player_loop of this.balance_dataToDisplay()){
       let exists=false;
-      
-      // to be a candidate the id has to be different
-      if(player.idplayer==player_loop.idplayer){
+      if(player_loop.recap){
         exists=true;
         continue;
-      }   
+      }
+      // to be a candidate the id has to be different
+      //if(player.idplayer==player_loop.idplayer){
+      //  exists=true;
+      //  continue;
+      //}   
 
       // to be a candidate the current balance has to be oppositional
       if(player_loop.current_balance > 0 ) {
-        if( player.current_balance > 0 ){
+        if( this.positiveCurrentBalance(player1Arr) ){
           exists=true;
           continue;
         }                   
       }else{
-        if( player.current_balance < 0 ){
+        if( this.negativeCurrentBalance(player1Arr) ){
           exists=true;
           continue;
         } 
@@ -215,22 +257,41 @@ export class BusinessService {
             continue;
         }
       }
+      if(player1Arr.length<1){
+        player_loop.recap=true;
+        player2Arr.push(player_loop);
+        return player2Arr;
+      }
+
       switch(solver){
         case 1:
-          if(player.idplayer>0 && player_loop.positive_balance!=player.positive_balance){
+          if(player1Arr.length>0 && player_loop.positive_balance!=this.sumPositiveBalance(player1Arr)){
             exists=true;
           }
-          break;
+          if(!exists){
+            player_loop.recap=true;
+            player2Arr.push(player_loop);
+            return player2Arr;
+          }
+        break;
+        case 2:
+          let sum1 = this.sumCurrentBalance(player1Arr);
+          let sum2 = this.sumCurrentBalance(player2Arr);
+          if(sum1+sum2!=0){
+            continue;
+          }            
+        break;
       }
         
-      if(!exists){
-        this.recapBalance.push(player_loop);
-        this.clonedBalance  = this.clonedBalance.filter((e, i) => e.idplayer !== player_loop.idplayer); 
-        return player_loop;
-      }
     }
-    return this.getPlayerEmpty();
+    return player2Arr;
 
+  }
+  negativeCurrentBalance(player1Arr: Player[]) {
+    return player1Arr.filter((e, i) => e.current_balance<0).length > 0;
+  }
+  positiveCurrentBalance(player1Arr: Player[]) {
+    return player1Arr.filter((e, i) => e.current_balance>0).length > 0;
   }
 
   sortBalance(balance_dataToDisplay : Player[]) {
