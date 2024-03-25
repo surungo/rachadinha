@@ -1,42 +1,3 @@
-v0.3.0 b24-03-12.16
-
-<div class="demo-button-container ">
-  <mat-form-field appearance="outline" class="demo-button">
-    <mat-label>Name</mat-label>
-    <input  [formControl]="name" matInput placeholder="">
-    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="demo-button amount-form-field">
-    <mat-label>Amount</mat-label>
-    <input [formControl]="amount"
-    currencyMask
-    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
-      matInput 
-    type="text" 
-    class="example-right-align"
-    placeholder="0">
-  </mat-form-field>
-  <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
-  <br>
-  <button mat-raised-button (click)="addData()">Add data</button>
-  <button mat-raised-button (click)="businessService.removeItem()">Remove select itens</button>
-  <button mat-raised-button (click)="businessService.removeData()">Clear table</button>
-  <button mat-raised-button (click)="clearFields()">Clear fields</button>
-
-  <button mat-raised-button (click)="businessService.updateBalance()">Update Balance</button>  
-  <button mat-raised-button (click)="businessService.updateRefund()">Update Refund</button>  
-  <!--  
-  <button mat-raised-button (click)="clearFields()">Clear fields</button>
-  <button mat-raised-button[disabled]="!dataToDisplay.length"
-  (click)="removeData()"
-  class="demo-button">
-  Remove select data
-</button>
-<button mat-raised-button (click)="clearTable()">Clear table</button>
-
--->
-
-</div>
 <mat-tab-group>
   
   <mat-tab label="Refund"> 
@@ -64,5 +25,41 @@ v0.3.0 b24-03-12.16
   </mat-tab>
 
 </mat-tab-group>
+ <div style="height: 199px;background-color: aqua;"></div>
+<!-- <div style="height: 122px;background-color: aqua;"></div> -->
+<div class="fixed-bottom">
+  <br>
+  <mat-form-field appearance="outline" class="demo-button">
+    <mat-label>Name</mat-label>
+    <input  [formControl]="name" matInput placeholder="">
+    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="demo-button amount-form-field">
+    <mat-label>Amount</mat-label>
+    <input [formControl]="amount"
+    currencyMask
+    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
+      matInput 
+    type="text" 
+    class="example-right-align"
+    placeholder="0">
+  </mat-form-field>
+  <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
+  <br>
+  <button mat-raised-button (click)="btnAddData()">Add data</button>
+  <button mat-raised-button [hidden]="businessService.balance_dataToDisplay().length<=0" (click)="btnRemoveItem()">Remove select itens</button>
+  <button mat-raised-button [hidden]="businessService.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
+  <button mat-raised-button (click)="btnClearFields()">Clear fields</button>
+ 
+<br>
+  <button mat-raised-button (click)="btnUpdateBalance()">Update Balance</button>  
+  <button mat-raised-button (click)="btnUpdatePositiveBalance()">Update Positive Balance</button>
+<br>  
+  <button mat-raised-button (click)="btnRestartCurrentBalance()">Restart Current Balance</button>
+  <button mat-raised-button (click)="btnUpdateRefund()">Update Refund</button>  
+ 
+<br>
+<div style="width: 95%;text-align: right;">{{businessService.version()}}</div>
 
+</div>
 

@@ -12,9 +12,9 @@ import { BusinessService } from '../../service/business.service';
 export class RefundComponent implements AfterViewInit{
   
   displayedColumns: string[] = ['select'
-  , 'name_payer', 'balance_payer'//, 'amount_payer', 'free_payer', 'positive_balance_payer',  'idplayer_payer'
+  , 'name_payer'//, 'balance_payer'//, 'amount_payer', 'free_payer', 'positive_balance_payer',  'idplayer_payer'
   , 'amount'
-  , 'name_payee', 'balance_payee'//, 'amount_payee', 'free_payee', 'positive_balance_payee',  'idplayer_payee'
+  , 'name_payee', 'current_balance_payer', 'current_balance_payee'//, 'balance_payee'//, 'amount_payee', 'free_payee', 'positive_balance_payee',  'idplayer_payee'
 ];
   
   constructor(
