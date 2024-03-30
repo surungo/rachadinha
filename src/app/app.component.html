@@ -1,13 +1,4 @@
 <mat-tab-group>
-  
-  <mat-tab label="Refund"> 
- 
-    <br>
-    <br>
-    <app-refund-component />
-    
-  </mat-tab>
-  
   <mat-tab label="Balance">
     
     <br>
@@ -16,6 +7,15 @@
   
   </mat-tab>
 
+  <mat-tab label="Refund"> 
+ 
+    <br>
+    <br>
+    <app-refund-component />
+    
+  </mat-tab>
+  
+ 
 </mat-tab-group>
  <div style="height: 199px;background-color: aqua;"></div>
 <!-- <div style="height: 122px;background-color: aqua;"></div> -->
@@ -39,19 +39,19 @@
   <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
   <br>
   <button mat-raised-button (click)="btnAddData()">Add data</button>
-  <button mat-raised-button [hidden]="businessService.balance_dataToDisplay().length<=0" (click)="btnRemoveItem()">Remove select itens</button>
-  <button mat-raised-button [hidden]="businessService.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
+  <button mat-raised-button [hidden]="balanceService.balance_dataToDisplay().length<=0" (click)="btnRemoveItem()">Remove select itens</button>
+  <button mat-raised-button [hidden]="balanceService.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
   <button mat-raised-button (click)="btnClearFields()">Clear fields</button>
  
 <br>
-  <button mat-raised-button (click)="btnAddPlayerTest()">Add Player Test1</button>  
+  <button mat-raised-button (click)="btnAddBalancesTest()">Add Balances Test1</button>  
   <button mat-raised-button (click)="btnUpdateBalance()">Update Balance</button>  
   <button mat-raised-button (click)="btnRestartCurrentBalance()">Restart Current Balance</button>
 <br>  
   <button mat-raised-button (click)="btnUpdateRefund()">Update Refund</button>  
  
 <br>
-<div style="width: 95%;text-align: right;">{{businessService.version()}}</div>
+<div style="width: 95%;text-align: right;">{{refundService.version()}}</div>
 
 </div>
 

@@ -1,10 +1,10 @@
-import { Player } from "./player";
+import { Balance } from "./balance";
 
-Player
+Balance
 export class Refund {
     idrefund!: number;
-    payer!: Player;    
-    payee!: Player;
+    payer!: Balance;    
+    payee!: Balance;
     amount!: number;
 
     constructor() {}    

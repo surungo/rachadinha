@@ -2,7 +2,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { AfterViewInit, Component, ViewChild} from '@angular/core';
 import { Refund } from '../../model/refund';
 import { MatSort, Sort } from '@angular/material/sort';
-import { BusinessService } from '../../service/business.service';
+import { RefundService } from '../../service/refund.service';
 
 @Component({
   selector: 'app-refund-component',
@@ -12,14 +12,14 @@ import { BusinessService } from '../../service/business.service';
 export class RefundComponent implements AfterViewInit{
   
   displayedColumns: string[] = ['select'
-  , 'name_payer'//, 'balance_payer'//, 'amount_payer', 'free_payer', 'positive_balance_payer',  'idplayer_payer'
+  , 'name_payer'//, 'balance_payer'//, 'amount_payer', 'free_payer', 'positive_balance_payer',  'idbalance_payer'
   , 'amount'
-  , 'name_payee', 'current_balance_payer', 'current_balance_payee'//, 'balance_payee'//, 'amount_payee', 'free_payee', 'positive_balance_payee',  'idplayer_payee'
+  , 'name_payee', 'current_balance_payer', 'current_balance_payee'//, 'balance_payee'//, 'amount_payee', 'free_payee', 'positive_balance_payee',  'idbalance_payee'
 ];
   
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
-    public businessService: BusinessService
+    public businessService: RefundService
     ){
   }
   

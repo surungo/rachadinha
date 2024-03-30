@@ -1,7 +1,8 @@
 import { Component, effect } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Player } from './model/player';
-import { BusinessService } from './service/business.service';
+import { Balance } from './model/balance';
+import { RefundService } from './service/refund.service';
+import { BalanceService } from './service/balance.service'; 
 
 @Component({
   selector: 'app-root',
@@ -11,13 +12,14 @@ import { BusinessService } from './service/business.service';
 export class AppComponent{
   
   constructor(
-    public businessService: BusinessService
+    public refundService: RefundService,
+    public balanceService: BalanceService
     ){}
   
   name = new FormControl("");
   amount = new FormControl(0);
   free = new FormControl("");
-  app_player: Player = new Player();
+  add_balance: Balance = new Balance();
   
   btnAddData(){
     let name=String(this.name.value);
@@ -25,20 +27,20 @@ export class AppComponent{
       alert("Preencha um nome");
       return;
     }
-    this.app_player=new Player();
-    this.app_player.name=name;
-    this.app_player.amount=Number(this.amount.value);
-    this.app_player.free=Boolean(this.free.value);
-    this.businessService.addData(this.app_player);
+    this.add_balance=new Balance();
+    this.add_balance.name=name;
+    this.add_balance.amount=Number(this.amount.value);
+    this.add_balance.free=Boolean(this.free.value);
+    this.balanceService.addData(this.add_balance);
     this.btnClearFields();
   }
 
   btnRemoveItem() {
-    this.businessService.removeItem()
+    this.balanceService.removeItem()
   }
 
   btnRemoveData() {
-    this.businessService.removeData();
+    this.balanceService.removeData();
   }
 
   btnClearFields(){
@@ -49,19 +51,19 @@ export class AppComponent{
 
 
   btnUpdateBalance() {
-    this.businessService.updateBalance();
+    this.balanceService.updateBalance();
   }
 
   btnRestartCurrentBalance() {
-    this.businessService.restartCurrentBalance()
+    this.balanceService.restartCurrentBalance()
   }
 
   btnUpdateRefund() {
-    this.businessService.updateRefund()
+    this.refundService.updateRefund()
   }  
 
-  btnAddPlayerTest(){
-    this.businessService.addPlayerTest();
+  btnAddBalancesTest(){
+    this.balanceService.addBalancesTest();
   }
 
 }

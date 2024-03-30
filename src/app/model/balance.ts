@@ -1,6 +1,6 @@
-export class Player {
+export class Balance {
     name!: string ;
-    idplayer!: number;
+    idbalance!: number;
     amount!: number;
     balance!: number;
     positive_balance!: number;    
