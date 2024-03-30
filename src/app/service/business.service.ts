@@ -14,16 +14,18 @@ export class BusinessService {
   public version = signal("v0.5.0 b24-03-25.17");
 
   PLAYER_DATA: Player[] = [
-    { idplayer: 1, name: 'Hydrogen',  amount: 650.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
-    { idplayer: 2, name: 'Helium',    amount: 350.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
-    { idplayer: 3, name: 'Lithium',   amount: 700.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
-    { idplayer: 4, name: 'Beryllium', amount: 400.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
-    { idplayer: 5, name: 'Boron',     amount: 400.00, balance: 0.00, positive_balance: 0.00, current_balance: 0.00, free: false, recap: false },
-    //{idplayer: 6,  name: 'Carbon',    amount: 12.07, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
-    //{idplayer: 7,  name: 'Nitrogen',  amount: 14.67, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
-    //{idplayer: 8,  name: 'Oxygen',    amount: 15.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
-    //{idplayer: 9,  name: 'Fluorine',  amount: 18.94, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
-    //{idplayer: 10, name: 'Neon',      amount: 20.17, balance: 0.00, positive_current_balance: 0.00, current_balance: 0.00,  free: false, recap: false },
+    //{	amount:	650	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	1	,	name:	"Hydrogen"	},
+    //{	amount:	350	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	2	,	name:	"Helium"	},
+    //{	amount:	700	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	3	,	name:	"Lithium"	},
+    //{	amount:	400	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	4	,	name:	"Beryllium"	},
+    //{	amount:	400	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	5	,	name:	"Boron"	},
+    {	amount:	200	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	6	,	name:	"Carbon"	},
+    {	amount:	650	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	7	,	name:	"Nitrogen"	},
+    {	amount:	650	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	8	,	name:	"Oxygen"	},
+    {	amount:	700	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	9	,	name:	"Fluorine"	},
+    {	amount:	400	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	10	,	name:	"Neon"	},
+    {	amount:	400	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idplayer:	11	,	name:	"Sodium"	},    
+
   ];
 
   nmDataPlayer: string = "dataPlayer";
@@ -201,7 +203,7 @@ export class BusinessService {
   }
   resetRecap(balance_dataToDisplay: Player[]): Player[] {
     balance_dataToDisplay
-      .filter((e, i) => e.current_balance > 0 )
+      .filter((e, i) => e.current_balance != 0 )
       .forEach((e, i) => e.recap=false);
      return balance_dataToDisplay; 
   }
@@ -275,11 +277,17 @@ export class BusinessService {
           }
         break;
         case 2:
+          if(!exists){
+            player_loop.recap=true;
+            player2Arr.push(player_loop);
+          }
           let sum1 = this.sumCurrentBalance(player1Arr);
           let sum2 = this.sumCurrentBalance(player2Arr);
           if(sum1+sum2!=0){
             continue;
-          }            
+          }else{
+            return player2Arr; 
+          }      
         break;
       }
         
