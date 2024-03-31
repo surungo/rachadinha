@@ -2,20 +2,25 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Balance } from '../../model/balance';
 import { MatSort, Sort } from '@angular/material/sort';
-import { BalanceService } from '../../service/balance.service';
+import { BalanceStorage } from '../../storage/balance.storage';
+import BalanceService from '../../service/balance/balance.service';
 
 @Component({
   selector: 'app-balance-component',
   templateUrl: './balance.component.html',
   styleUrl: './balance.component.css'
 })
-export class BalanceComponentComponent implements AfterViewInit {
+export class BalanceComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['select', 'name', 'amount', 'balance', 'current_balance', 'free', 'positive_balance', 'idbalance'];
+  displayedColumns: string[] = ['select', 'name', 'amount', 'balance'
+  //, 'current_balance'
+  , 'free'//, 'positive_balance', 'idbalance'
+];
 
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
-    public balanceService: BalanceService,
+    public balanceStorage: BalanceStorage,
+    private balanceService: BalanceService,
   ) {
     this.balanceService.loadData();
   }
@@ -23,7 +28,7 @@ export class BalanceComponentComponent implements AfterViewInit {
   @ViewChild(MatSort)
   sort!: MatSort;
   ngAfterViewInit(): void {
-    this.balanceService.balance_dataSource().sort = this.sort;
+    this.balanceStorage.balance_dataSource().sort = this.sort;
   }
 
   announceSortChange(sortState: Sort) {
@@ -36,19 +41,19 @@ export class BalanceComponentComponent implements AfterViewInit {
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.balanceService.balance_selection().selected.length;
-    const numRows = this.balanceService.balance_dataToDisplay().length;
+    const numSelected = this.balanceStorage.balance_selection().selected.length;
+    const numRows = this.balanceStorage.balance_dataToDisplay().length;
     return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
     if (this.isAllSelected()) {
-      this.balanceService.balance_selection().clear();
+      this.balanceStorage.balance_selection().clear();
       return;
     }
 
-    this.balanceService.balance_selection().select(...this.balanceService.balance_dataToDisplay());
+    this.balanceStorage.balance_selection().select(...this.balanceStorage.balance_dataToDisplay());
   }
 
   /** The label for the checkbox on the passed row */
@@ -56,7 +61,7 @@ export class BalanceComponentComponent implements AfterViewInit {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.balanceService.balance_selection().isSelected(row) ? 'deselect' : 'select'} row ${row.idbalance + 1}`;
+    return `${this.balanceStorage.balance_selection().isSelected(row) ? 'deselect' : 'select'} row ${row.idbalance + 1}`;
   }
 
 }

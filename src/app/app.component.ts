@@ -1,20 +1,31 @@
 import { Component, effect } from '@angular/core';
+
 import { FormControl } from '@angular/forms';
 import { Balance } from './model/balance';
-import { RefundService } from './service/refund.service';
-import { BalanceService } from './service/balance.service'; 
+import { RefundStorage } from './storage/refund.storage';
+import { BalanceStorage } from './storage/balance.storage';
+import  BalanceService  from './service/balance/balance.service';
+import { RefundService } from './service/refund/refund.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.css'
 })
+
+
+
 export class AppComponent{
   
   constructor(
-    public refundService: RefundService,
-    public balanceService: BalanceService
+    private refundStorage: RefundStorage,
+    private refundService: RefundService,
+    public balanceStorage: BalanceStorage,
+    private balanceService: BalanceService,
+    
     ){}
+
+    public version = "v1.0.0 b24-03-31.02";
   
   name = new FormControl("");
   amount = new FormControl(0);
@@ -31,16 +42,18 @@ export class AppComponent{
     this.add_balance.name=name;
     this.add_balance.amount=Number(this.amount.value);
     this.add_balance.free=Boolean(this.free.value);
-    this.balanceService.addData(this.add_balance);
+    this.balanceStorage.addData(this.add_balance);
     this.btnClearFields();
+    this.refundService.resolve();
   }
 
   btnRemoveItem() {
-    this.balanceService.removeItem()
+    this.balanceStorage.removeItem()
   }
 
   btnRemoveData() {
-    this.balanceService.removeData();
+    this.balanceStorage.removeData();
+    this.refundStorage.removeData();
   }
 
   btnClearFields(){
@@ -49,21 +62,18 @@ export class AppComponent{
     this.free.setValue("");
   }
 
-
-  btnUpdateBalance() {
-    this.balanceService.updateBalance();
-  }
-
-  btnRestartCurrentBalance() {
-    this.balanceService.restartCurrentBalance()
-  }
-
-  btnUpdateRefund() {
-    this.refundService.updateRefund()
+  btnSolverRefund() {
+    this.refundService.resolve();
+  }  
+  btnAllRefund() {
+    this.refundService.allRefunds();
   }  
 
   btnAddBalancesTest(){
     this.balanceService.addBalancesTest();
+    this.balanceService.resetBalance();
   }
 
 }
+
+

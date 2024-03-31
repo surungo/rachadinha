@@ -2,7 +2,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { AfterViewInit, Component, ViewChild} from '@angular/core';
 import { Refund } from '../../model/refund';
 import { MatSort, Sort } from '@angular/material/sort';
-import { RefundService } from '../../service/refund.service';
+import { RefundStorage } from '../../storage/refund.storage';
 
 @Component({
   selector: 'app-refund-component',
@@ -12,21 +12,25 @@ import { RefundService } from '../../service/refund.service';
 export class RefundComponent implements AfterViewInit{
   
   displayedColumns: string[] = ['select'
-  , 'name_payer'//, 'balance_payer'//, 'amount_payer', 'free_payer', 'positive_balance_payer',  'idbalance_payer'
+  //, 'idrefund'
+  , 'name_payer'//,  'idbalance_payer'//, 'balance_payer'//, 'amount_payer', 'free_payer', 'positive_balance_payer'
   , 'amount'
-  , 'name_payee', 'current_balance_payer', 'current_balance_payee'//, 'balance_payee'//, 'amount_payee', 'free_payee', 'positive_balance_payee',  'idbalance_payee'
+  //, 'currentBalance'
+  , 'name_payee'//,  'idbalance_payee'
+  //, 'current_balance_payer', 'current_balance_payee'//, 'balance_payee'//, 'amount_payee', 'free_payee', 'positive_balance_payee'
 ];
   
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
-    public businessService: RefundService
+    public refundStorage: RefundStorage
     ){
+      this.refundStorage.loadData();
   }
   
   @ViewChild(MatSort)
   sort!: MatSort;
   ngAfterViewInit(): void {
-    this.businessService.balance_dataSource().sort = this.sort;
+    this.refundStorage.refund_dataSource().sort = this.sort;
   }
  
   announceSortChange(sortState: Sort) {
@@ -39,19 +43,19 @@ export class RefundComponent implements AfterViewInit{
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.businessService.refund_selection().selected.length;
-    const numRows = this.businessService.refund_dataToDisplay().length;
+    const numSelected = this.refundStorage.refund_selection().selected.length;
+    const numRows = this.refundStorage.refund_dataToDisplay().length;
     return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
     if (this.isAllSelected()) {
-      this.businessService.refund_selection().clear();
+      this.refundStorage.refund_selection().clear();
       return;
     }
 
-    this.businessService.refund_selection().select(...this.businessService.refund_dataToDisplay());
+    this.refundStorage.refund_selection().select(...this.refundStorage.refund_dataToDisplay());
   }
 
   /** The label for the checkbox on the passed row */
@@ -59,7 +63,7 @@ export class RefundComponent implements AfterViewInit{
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.businessService.refund_selection().isSelected(row) ? 'deselect' : 'select'} row ${row.idrefund + 1}`;
+    return `${this.refundStorage.refund_selection().isSelected(row) ? 'deselect' : 'select'} row ${row.idrefund + 1}`;
   }
   
 }

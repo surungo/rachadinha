@@ -1,49 +1,17 @@
 import { Injectable, signal } from "@angular/core";
-import { Balance } from "../model/balance";
 import { MatTableDataSource } from "@angular/material/table";
-import { LocalStorageService } from "../local-storage.service";
+import { LocalStorageService } from "./local-storage.service";
 import { SelectionModel } from "@angular/cdk/collections";
 import { Refund } from "../model/refund";
-import { UtilService } from "./util.service";
-import { BalanceService } from "./balance.service";
-
 
 @Injectable({
   providedIn: 'root',
 })
 
-export class RefundService {
-  public version = signal("v0.5.0 b24-03-25.17");
-
-  BALANCE_DATA: Balance[] = [
-    {	amount:	650	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	1	,	name:	"Hydrogen"	},
-    {	amount:	350	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	2	,	name:	"Helium"	},
-    {	amount:	700	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	3	,	name:	"Lithium"	},
-    {	amount:	400	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	4	,	name:	"Beryllium"	},
-    {	amount:	400	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	5	,	name:	"Boron"	},
-    //{	amount:	200	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	6	,	name:	"Carbon"	},
-    //{	amount:	650	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	7	,	name:	"Nitrogen"	},
-    //{	amount:	650	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	8	,	name:	"Oxygen"	},
-    //{	amount:	700	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	9	,	name:	"Fluorine"	},
-    //{	amount:	400	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	10	,	name:	"Neon"	},
-    //{	amount:	400	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	11	,	name:	"Sodium"	},    
-
-  ];
-
-  nmDataBalance: string = "dataBalance";
-  public balance = signal<Balance>(new Balance());
-  public balance_dataToDisplay = signal<Balance[]>([]);//...this.BALANCE_DATA]);  
-  public balance_dataSource = signal(new MatTableDataSource(this.balance_dataToDisplay()));
-  public balance_selection = signal(new SelectionModel<Balance>(true, []));
-
-  public balance_total = signal(0);
-  public totalAmount = signal(0);
-  public totalNoFree = signal(0);
-  public totalForPerson = signal(0);
-  public totalBalance = signal(0);
-
+export class RefundStorage {
+  
   REFUND_DATA: Refund[] = [
-    { 'idrefund': 0, 'payee': this.BALANCE_DATA[0], 'payer': this.BALANCE_DATA[1], 'amount': 0 }
+    //{ 'idrefund': 0, 'payee': this.BALANCE_DATA[0], 'payer': this.BALANCE_DATA[1], 'amount': 0 }
   ];
   nmDataRefund: string = "dataRefund";
   public refund = signal<Refund>(new Refund());//this.REFUND_DATA[0]); 
@@ -51,11 +19,9 @@ export class RefundService {
   public refund_dataSource = signal(new MatTableDataSource(this.refund_dataToDisplay()));
   public refund_selection = signal(new SelectionModel<Refund>(true, []));
   
-  constructor(private storageService: LocalStorageService,
-              public utilService: UtilService,
-              //public balanceService: BalanceService,
-              ) {
-    //this.loadData();
+  constructor(
+    private storageService: LocalStorageService,
+    ) {
   }
 
   loadData() {
@@ -64,117 +30,33 @@ export class RefundService {
 
   loadRefundData() {
     this.refund_dataToDisplay.set(this.storageService.get(this.nmDataRefund));
+    this.loadDataSource(this.refund_dataToDisplay());    
+  }
+
+  loadDataSource(refund_dataToDisplay: Refund[]){
+    this.refund_dataToDisplay.set(refund_dataToDisplay);
     this.refund_dataSource.set(new MatTableDataSource(this.refund_dataToDisplay()));
   }
 
-  updateRefund(){
-   // this.createRefund();    
+  saveRefund() {
+    this.refund_dataSource.set(new MatTableDataSource(this.refund_dataToDisplay()));
+    this.storageService.set(this.nmDataRefund, this.refund_dataToDisplay());
   }
-/*
-  class ObjP {
-    // Define the properties of ObjP class (you can adjust these based on your actual class definition)
-    // For example:
-    // id: string;
-    // name: string;
-    // ...
-
-    constructor(// Initialize properties here 
-    ) {
-        // Initialize properties
-    }
+  saveRefundData(refund_Data: Refund[]) {
+    this.refund_dataToDisplay.set([...refund_Data]);
+    this.saveRefund();
 }
 
-class ObjC {
-    listP: ObjP[] = [];
-    balance: number = 0;
-    id: string = "";
-
-    constructor(// Initialize properties here 
-    ) {
-        // Initialize properties
-    }
+clearRefund() {
+  this.refund_dataToDisplay.set(<Refund[]>([]));
+  this.refund_dataSource.set(new MatTableDataSource(this.refund_dataToDisplay()));
+  this.storageService.set(this.nmDataRefund, this.refund_dataToDisplay());
 }
 
-class SvcP {
-    static sumBalance(listP: ObjP[]): number {
-        // Implement the sumBalance function (if needed)
-        // Example implementation:
-        // let sum = 0;
-        // for (const obj of listP) {
-        //     sum += obj.balance;
-        // }
-        // return sum;
-        return 0; // Placeholder
-    }
+removeData() {
+  this.storageService.clear();
+  this.loadData();
 }
-
-class Utils {
-    static leftPad(str: string, length: number, padChar: string): string {
-        // Implement the leftPad function (if needed)
-        // Example implementation:
-        // while (str.length < length) {
-        //     str = padChar + str;
-        // }
-        // return str;
-        return str; // Placeholder
-    }
-}
-
-function generateCombination(
-    result: ObjC[],
-    arr: ObjP[],
-    data: ObjC,
-    start: number,
-    index: number,
-    r: number,
-    all: boolean
-): void {
-    const size = arr.length;
-    const end = size - 1;
-
-    if (index === r) {
-        data.balance = SvcP.sumBalance(data.listP);
-        data.id = Utils.leftPad(String(result.length), 3, "0");
-        result.push(new ObjC(data));
-        data = new ObjC();
-        return;
-    }
-
-    for (let i = start; i <= end && end - i + 1 >= r - index; i++) {
-        if (data.listP.length > index) {
-            data.listP[index] = arr[i];
-        } else {
-            data.listP.push(arr[i]);
-        }
-        generateCombination(result, arr, data, i + 1, index + 1, r, all);
-    }
-
-    if (all && r <= end && start === 0) {
-        start = 0;
-        index = 0;
-        r++;
-        generateCombination(result, arr, new ObjC(), start, index, r, all);
-    }
-}
-
-// Example usage:
-const result: ObjC[] = [];
-const arr: ObjP[] = []; // Initialize with your actual data
-const data = new ObjC();
-const start = 0;
-const index = 0;
-const r = 2; // Set the desired combination size
-const all = true; // Set to true if you want to generate all combinations
-
-generateCombination(result, arr, data, start, index, r, all);
-
-// Print the generated combinations (you can adjust this based on your actual use case)
-for (const obj of result) {
-    console.log(obj);
-}
-*/
-
-
 
 /*
     TRASH 1
@@ -461,21 +343,9 @@ for (const obj of result) {
     }
   }
 
-  saveRefund() {
-    this.refund_dataSource.set(new MatTableDataSource(this.refund_dataToDisplay()));
-    this.storageService.set(this.nmDataRefund, this.refund_dataToDisplay());
-  }
 
-  clearRefund() {
-    this.refund_dataToDisplay.set(<Refund[]>([]));
-    this.refund_dataSource.set(new MatTableDataSource(this.refund_dataToDisplay()));
-    this.storageService.set(this.nmDataRefund, this.refund_dataToDisplay());
-  }
 
-  removeData() {
-    this.storageService.clear();
-    this.loadData();
-  }
+
 
   
 
