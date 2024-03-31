@@ -17,6 +17,7 @@ export class BalanceStorage {
     public balance_dataSource = signal(new MatTableDataSource(this.balance_dataToDisplay()));
     public balance_selection = signal(new SelectionModel<Balance>(true, []));
 
+    public balanceName = signal("");
     public balanceLength = signal(0);
     public totalAmount = signal(0);
     public totalNoFree = signal(0);

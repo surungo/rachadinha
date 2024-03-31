@@ -25,13 +25,22 @@ export class AppComponent{
     
     ){}
 
-    public version = "v1.0.0 b24-03-31.02";
+    public version = "v1.1.0 b24-03-31.19";
   
-  name = new FormControl("");
+  name = new FormControl(this.balanceStorage.balanceName());
   amount = new FormControl(0);
   free = new FormControl("");
   add_balance: Balance = new Balance();
-  
+
+  hiddenClearFiels(): boolean {
+    return this.amount.value==0&&String(this.name.value)=='';
+  }
+
+  hiddenNotSelected() {
+    const numSelected = this.balanceStorage.balance_selection().selected.length;
+    return numSelected == 0;
+  }
+      
   btnAddData(){
     let name=String(this.name.value);
     if(name.trim() == ""){
@@ -43,10 +52,9 @@ export class AppComponent{
     this.add_balance.amount=Number(this.amount.value);
     this.add_balance.free=Boolean(this.free.value);
     this.balanceStorage.addData(this.add_balance);
-    this.btnClearFields();
     this.refundService.resolve();
   }
-
+ 
   btnRemoveItem() {
     this.balanceStorage.removeItem()
   }
@@ -75,5 +83,3 @@ export class AppComponent{
   }
 
 }
-
-

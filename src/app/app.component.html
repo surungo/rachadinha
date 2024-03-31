@@ -1,30 +1,28 @@
+<div style="width: 98%;text-align: right;">Rachadinha {{version}} for Embiro created by Surungo</div>
 <div class="fixed-bottom">
   <br>
-  <mat-form-field appearance="outline" class="demo-button">
+  <mat-form-field appearance="outline" class="fields">
     <mat-label>Name</mat-label>
     <input  [formControl]="name" matInput placeholder="">
     <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
   </mat-form-field>
-  <mat-form-field appearance="outline" class="demo-button amount-form-field">
+  <mat-form-field appearance="outline" class="fields amount-form-field">
     <mat-label>Amount</mat-label>
     <input [formControl]="amount"
     currencyMask
     [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
       matInput 
     type="text" 
-    class="example-right-align"
+    class="main-right-align"
     placeholder="0">
   </mat-form-field>
   <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
   <br>
-  <button mat-raised-button (click)="btnAddData()">Add data</button>
-  <button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnRemoveItem()">Remove select itens</button>
-  <button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
-  <button mat-raised-button (click)="btnClearFields()">Clear fields</button>
+  <button mat-raised-button [hidden]="hiddenClearFiels()" (click)="btnAddData()">Add data</button>
+  <button mat-raised-button [hidden]="hiddenNotSelected()" (click)="btnRemoveItem()">Remove select itens</button>
+  <button mat-raised-button [hidden]="hiddenClearFiels()" (click)="btnClearFields()">Clear fields</button>
   
  
-<br>
-<div style="width: 95%;text-align: right;">{{version}}</div>
 
 </div>
 
@@ -48,5 +46,6 @@
 </mat-tab-group>
 <br>
 <br>
+<button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
 <br>
 <button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnSolverRefund()">Solver Refund</button>  
