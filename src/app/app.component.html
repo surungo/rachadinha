@@ -1,32 +1,3 @@
-<mat-tab-group>
-  
-  <mat-tab label="Refund"> 
- 
-    <br>
-    <br>
-    <app-refund-component />
- 
-    <br>
-    <br>
-    <app-balance-component />
-    
-  </mat-tab>
-  
-  <mat-tab label="Balance">
-    
-    <br>
-    <br>
-    <app-balance-component />
-    
-    <br>
-    <br>
-    <app-refund-component />
-
-  </mat-tab>
-
-</mat-tab-group>
- <div style="height: 199px;background-color: aqua;"></div>
-<!-- <div style="height: 122px;background-color: aqua;"></div> -->
 <div class="fixed-bottom">
   <br>
   <mat-form-field appearance="outline" class="demo-button">
@@ -47,19 +18,35 @@
   <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
   <br>
   <button mat-raised-button (click)="btnAddData()">Add data</button>
-  <button mat-raised-button [hidden]="businessService.balance_dataToDisplay().length<=0" (click)="btnRemoveItem()">Remove select itens</button>
-  <button mat-raised-button [hidden]="businessService.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
+  <button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnRemoveItem()">Remove select itens</button>
+  <button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
   <button mat-raised-button (click)="btnClearFields()">Clear fields</button>
+  
  
 <br>
-  <button mat-raised-button (click)="btnUpdateBalance()">Update Balance</button>  
-  <button mat-raised-button (click)="btnUpdatePositiveBalance()">Update Positive Balance</button>
-<br>  
-  <button mat-raised-button (click)="btnRestartCurrentBalance()">Restart Current Balance</button>
-  <button mat-raised-button (click)="btnUpdateRefund()">Update Refund</button>  
- 
-<br>
-<div style="width: 95%;text-align: right;">{{businessService.version()}}</div>
+<div style="width: 95%;text-align: right;">{{version}}</div>
 
 </div>
 
+<mat-tab-group>
+  <mat-tab label="Balance">
+    
+    <br>
+    <br>
+    <app-balance-component />
+  
+  </mat-tab>
+
+  <mat-tab label="Refund"> 
+ 
+    <br>
+    <br>
+    <app-refund-component />
+    
+  </mat-tab>  
+ 
+</mat-tab-group>
+<br>
+<br>
+<br>
+<button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnSolverRefund()">Solver Refund</button>  

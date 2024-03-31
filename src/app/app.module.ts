@@ -15,14 +15,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSortModule } from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxCurrencyDirective } from 'ngx-currency';
-import { BalanceComponentComponent } from './component/balance/balance.component';
+import { BalanceComponent } from './component/balance/balance.component';
 import { RefundComponent } from './component/refund/refund.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BalanceComponentComponent,
-    RefundComponent
+    BalanceComponent,
+    RefundComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -38,10 +39,11 @@ import { RefundComponent } from './component/refund/refund.component';
     MatSortModule,
     MatTabsModule,
     ReactiveFormsModule,
-    NgxCurrencyDirective
+    NgxCurrencyDirective,
+    
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
   ],
   bootstrap: [AppComponent]
 })

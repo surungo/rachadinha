@@ -1,23 +1,32 @@
-<table mat-table [dataSource]="businessService.refund_dataSource()" class="mat-elevation-z8" matSort
+
+<table mat-table [dataSource]="refundStorage.refund_dataSource()" class="mat-elevation-z8" matSort
     (matSortChange)="announceSortChange($event)">
 
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                [checked]="businessService.refund_selection().hasValue() && isAllSelected()"
-                [indeterminate]="businessService.refund_selection().hasValue() && !isAllSelected()"
+                [checked]="refundStorage.refund_selection().hasValue() && isAllSelected()"
+                [indeterminate]="refundStorage.refund_selection().hasValue() && !isAllSelected()"
                 [aria-label]="checkboxLabel()">
             </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
             <mat-checkbox (click)="$event.stopPropagation()"
-                (change)="$event ? businessService.refund_selection().toggle(row) : null"
-                [checked]="businessService.refund_selection().isSelected(row)" [aria-label]="checkboxLabel(row)">
+                (change)="$event ? refundStorage.refund_selection().toggle(row) : null"
+                [checked]="refundStorage.refund_selection().isSelected(row)" [aria-label]="checkboxLabel(row)">
             </mat-checkbox>
         </td>
         <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
+
+        <!-- Idbalance Column -->
+        <ng-container matColumnDef="idrefund">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idbrefund"> Refund </th>
+            <td mat-cell *matCellDef="let element"> {{element.idrefund}} </td>
+            <td mat-footer-cell *matFooterCellDef> - </td>
+        </ng-container>
+    
 
     <!--  amount Column -->
     <ng-container matColumnDef="amount">
@@ -26,10 +35,17 @@
         <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
-    <!-- Idplayer Column -->
-    <ng-container matColumnDef="idplayer_payee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idplayer_payee"> No. Payee </th>
-        <td mat-cell *matCellDef="let element"> {{element.payee.idplayer}} </td>
+    <!--  currentBalance Column -->
+    <ng-container matColumnDef="currentBalance">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by currentBalance"> Current Balance </th>
+        <td mat-cell *matCellDef="let element"> {{element.current_balance  | currency}} </td>
+        <td mat-footer-cell *matFooterCellDef> - </td>
+    </ng-container>
+
+    <!-- Idbalance Column -->
+    <ng-container matColumnDef="idbalance_payee">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idbalance_payee"> No. Payee </th>
+        <td mat-cell *matCellDef="let element"> {{element.payee.idbalance}} </td>
         <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
@@ -82,10 +98,10 @@
         <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
-    <!-- Idplayer Column -->
-    <ng-container matColumnDef="idplayer_payer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idplayer_payer"> No. Payer </th>
-        <td mat-cell *matCellDef="let element"> {{element.payer.idplayer}} </td>
+    <!-- Idbalance Column -->
+    <ng-container matColumnDef="idbalance_payer">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idbalance_payer"> No. Payer </th>
+        <td mat-cell *matCellDef="let element"> {{element.payer.idbalance}} </td>
         <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
 
@@ -143,7 +159,7 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-        (click)="businessService.refund_selection().toggle(row)">
+        (click)="refundStorage.refund_selection().toggle(row)">
     </tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
 </table>

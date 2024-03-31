@@ -39,8 +39,8 @@
 
   .fixed-bottom {
     background-color: #494249;
-    position: fixed;
+   /* position: fixed;*/
     width: 100%;
-    bottom: 0px; /* Sets the sticky toolbar to be on top */
-    z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+  /*  bottom: 0px; *//* Sets the sticky toolbar to be on top */
+   /* z-index: 1000;*/ /* Ensure that your app's content doesn't overlap the toolbar */
 }
