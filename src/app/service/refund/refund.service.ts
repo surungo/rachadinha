@@ -183,5 +183,8 @@ export class RefundService {
     return refund_dataToDisplay;
   }
 
+  totalAmount(): string|number {
+    return (this.refundStorage.refund_dataToDisplay().map(t => t.amount).reduce((acc, value) => acc + ((value>0)?value:0) , 0));
+  }
 
 }

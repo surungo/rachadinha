@@ -32,7 +32,7 @@
     <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Amount"> Amount </th>
         <td mat-cell *matCellDef="let element"> {{element.amount  | currency}} </td>
-        <td mat-footer-cell *matFooterCellDef> - </td>
+        <td mat-footer-cell *matFooterCellDef> {{totalAmount() | currency}} </td>
     </ng-container>
 
     <!--  currentBalance Column -->
@@ -53,7 +53,7 @@
     <ng-container matColumnDef="name_payee">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name_payee"> Payee </th>
         <td mat-cell *matCellDef="let element"> {{element.payee.name}} </td>
-        <td mat-footer-cell *matFooterCellDef> - </td>
+        <td mat-footer-cell *matFooterCellDef> {{refundStorage.refund_dataSource().data.length }} </td>
     </ng-container>
 
     <!-- Amount Column -->
@@ -109,7 +109,7 @@
     <ng-container matColumnDef="name_payer">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name_payer"> Payer </th>
         <td mat-cell *matCellDef="let element"> {{element.payer.name}} </td>
-        <td mat-footer-cell *matFooterCellDef> - </td>
+        <td mat-footer-cell *matFooterCellDef> Total </td>
     </ng-container>
 
 

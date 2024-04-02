@@ -7,6 +7,7 @@ import { UtilService } from '../util.service';
   providedIn: 'root'
 })
 export default class BalanceService {
+
   BALANCE_DATA: Balance[] = [
     {	amount:	650	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	1	 ,	name:	"Hydrogen"	},
     {	amount:	350	,	balance:	0.00	,	positive_balance:	0.00	,	current_balance:	0.00	,	free:	false	,	recap:	false	,	idbalance:	2	 ,	name:	"Helium"	},
@@ -48,29 +49,49 @@ export default class BalanceService {
   }
 
   calculateTotalAmount(balance_dataToDisplay: Balance[]): number {
+    if(balance_dataToDisplay==null)return 0;
     return (balance_dataToDisplay.map(t => t.amount).reduce((acc, value) => acc + value, 0));
   }
+  totalAmount() : string | number {
+    return this.calculateTotalAmount(this.balanceStorage.balance_dataToDisplay());
+  }
+  //remove
   setTotalAmount(){
     this.balanceStorage.totalAmount.set(this.calculateTotalAmount(this.loadData()));
   }
   
   calculateTotalBalance(balance_dataToDisplay: Balance[]): number {
-    return (balance_dataToDisplay.map(t => t.balance).reduce((acc, value) => acc + value, 0));
+    if(balance_dataToDisplay==null)return 0;
+    return (balance_dataToDisplay.map(t => t.balance).reduce((acc, value) => acc + ((value>0)?value:0) , 0));
   }
+  totalBalance(): string | number {
+    return this.calculateTotalBalance(this.balanceStorage.balance_dataToDisplay());
+  }
+  // remove
   setTotalBalance() {
     this.balanceStorage.totalBalance.set(this.calculateTotalBalance(this.loadData()));
   }
 
   calculateTotal(balance_dataToDisplay: Balance[]): number {
-   return (balance_dataToDisplay.length);
+    if(balance_dataToDisplay==null)return 0;
+    return (balance_dataToDisplay.length);
   }
+  balanceLength(): string | number {
+    return this.calculateTotal(this.balanceStorage.balance_dataToDisplay());
+   }
+   //remove
   setTotal() {
     this.balanceStorage.balanceLength.set(this.calculateTotal(this.loadData()));
   }
   
   calculateTotalNoFree(balance_dataToDisplay: Balance[]): number {
+    if(balance_dataToDisplay==null)return 0;
     return (balance_dataToDisplay.map(t => t.free).reduce((acc, value) => (!value) ? acc + 1 : acc, 0));
   }
+  totalNoFree(): string | number{
+    return this.calculateTotalNoFree(this.balanceStorage.balance_dataToDisplay());
+  }
+  //remove
   setTotalNoFree() {
     this.balanceStorage.totalNoFree.set(this.calculateTotalNoFree(this.loadData()));
   }
@@ -78,8 +99,13 @@ export default class BalanceService {
   calculateTotalForPerson(balance_dataToDisplay: Balance[]) :number{
     let totalAmount = this.calculateTotalAmount(balance_dataToDisplay);
     let totalNoFree = this.calculateTotalNoFree(balance_dataToDisplay);
+    if(totalNoFree==0)return 0;
     return ( totalAmount / totalNoFree );
   }
+  totalForPerson(): string | number{
+    return this.calculateTotalForPerson(this.balanceStorage.balance_dataToDisplay());
+  }
+  //remove
   setTotalForPerson() {
     this.balanceStorage.totalForPerson.set(this.calculateTotalForPerson(this.balanceStorage.balance_dataToDisplay()));
   }
@@ -114,4 +140,5 @@ export default class BalanceService {
     });
     return balance_dataToDisplay;
   }
+
 }

@@ -33,6 +33,10 @@ export class AppComponent {
   amount = new FormControl(this.balanceStorage.amount());
   free = new FormControl(this.balanceStorage.free());
   add_balance: Balance = new Balance();
+  
+  showDevMode(){
+    return false;
+  }
 
   hiddenClearFiels(): boolean {
     return this.amount.value == 0 && String(this.name.value) == '';
