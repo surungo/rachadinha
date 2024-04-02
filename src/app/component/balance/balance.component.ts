@@ -12,10 +12,11 @@ import BalanceService from '../../service/balance/balance.service';
 })
 export class BalanceComponent implements AfterViewInit {
 
+
   displayedColumns: string[] = ['select', 'name', 'amount', 'balance'
   //, 'current_balance'
   , 'free'//, 'positive_balance', 'idbalance'
-];
+  ];
 
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
@@ -30,7 +31,10 @@ export class BalanceComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.balanceStorage.balance_dataSource().sort = this.sort;
   }
-
+  showDevMode(){
+    return false;
+  }
+  
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
@@ -64,5 +68,24 @@ export class BalanceComponent implements AfterViewInit {
     return `${this.balanceStorage.balance_selection().isSelected(row) ? 'deselect' : 'select'} row ${row.idbalance + 1}`;
   }
 
+  totalBalance(): string|number {
+    return this.balanceService.totalBalance();
+  }
+
+  balanceLength(): string|number {
+    return this.balanceService.balanceLength();
+  }
+
+  totalAmount() : string | number {
+    return this.balanceService.totalAmount();
+  }
+
+  totalNoFree(): string | number{
+    return this.balanceService.totalNoFree();
+  }
+
+  totalForPerson(): string | number{
+    return this.balanceService.totalForPerson();
+  }
 }
 
