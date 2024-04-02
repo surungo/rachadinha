@@ -1,6 +1,13 @@
-<div style="width: 98%;text-align: right;">Rachadinha {{version}} for Embiro created by Surungo</div>
+<div style="width: 98%;text-align: right;">
+  Rachadinha {{version}} for Embiro created by Surungo</div>
 <div class="fixed-bottom">
   <br>
+  <mat-form-field appearance="outline" class="fields">
+    <mat-label>idbalance</mat-label>
+    <input  [formControl]="idbalance" matInput placeholder="">
+    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+  </mat-form-field>
+
   <mat-form-field appearance="outline" class="fields">
     <mat-label>Name</mat-label>
     <input  [formControl]="name" matInput placeholder="">
@@ -8,7 +15,8 @@
   </mat-form-field>
   <mat-form-field appearance="outline" class="fields amount-form-field">
     <mat-label>Amount</mat-label>
-    <input [formControl]="amount"
+
+    <input  [formControl]="amount" 
     currencyMask
     [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
       matInput 
@@ -18,12 +26,20 @@
   </mat-form-field>
   <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
   <br>
-  <button mat-raised-button [hidden]="hiddenClearFiels()" (click)="btnAddData()">Add data</button>
-  <button mat-raised-button [hidden]="hiddenNotSelected()" (click)="btnRemoveItem()">Remove select itens</button>
-  <button mat-raised-button [hidden]="hiddenClearFiels()" (click)="btnClearFields()">Clear fields</button>
+  <button mat-raised-button [hidden]="hiddenClearFiels()" 
+  (click)="btnAddData()">Add amount</button>
+  <button mat-raised-button [hidden]="hiddenClearFiels()" 
+  (click)="btnDecreaseData()">Decrease amount</button>
+  
+  <button mat-raised-button [hidden]="hiddenEditItem()" 
+  (click)="btnEditItem()">Edit select itens</button>
+  <button mat-raised-button [hidden]="hiddenNotSelected()" 
+  (click)="btnRemoveItem()">Remove select itens</button>
+  <button mat-raised-button [hidden]="hiddenClearFiels()" 
+  (click)="btnClearFields()">Clear fields</button>
+ 
   
  
-
 </div>
 
 <mat-tab-group>

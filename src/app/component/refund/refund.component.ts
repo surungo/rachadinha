@@ -11,9 +11,9 @@ import { RefundStorage } from '../../storage/refund.storage';
 })
 export class RefundComponent implements AfterViewInit{
   
-  displayedColumns: string[] = ['select'
+  displayedColumns: string[] = [//'select'
   //, 'idrefund'
-  , 'name_payer'//,  'idbalance_payer'//, 'balance_payer'//, 'amount_payer', 'free_payer', 'positive_balance_payer'
+   'name_payer'//,  'idbalance_payer'//, 'balance_payer'//, 'amount_payer', 'free_payer', 'positive_balance_payer'
   , 'amount'
   //, 'currentBalance'
   , 'name_payee'//,  'idbalance_payee'
