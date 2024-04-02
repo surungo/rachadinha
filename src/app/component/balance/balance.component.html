@@ -17,35 +17,35 @@
                       [aria-label]="checkboxLabel(row)">
         </mat-checkbox>
       </td>
-      <td mat-footer-cell *matFooterCellDef> Total </td>
+      <td mat-footer-cell *matFooterCellDef> Total {{balanceLength()}} </td>
     </ng-container>
   
     <!-- Idbalance Column -->
     <ng-container matColumnDef="idbalance">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by idbalance"> No. </th>
       <td mat-cell *matCellDef="let element"> {{element.idbalance}} </td>
-      <td mat-footer-cell *matFooterCellDef> {{this.balanceStorage.balanceLength()}} </td>
+      <td mat-footer-cell *matFooterCellDef> - </td>
     </ng-container>
   
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Name </th>
       <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      <td mat-footer-cell *matFooterCellDef>{{this.balanceStorage.totalForPerson() | currency}} for person</td>
+      <td mat-footer-cell *matFooterCellDef>{{totalForPerson() | currency}} for person</td>
     </ng-container>
   
     <!-- Amount Column -->
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by amount"> Amount </th>
       <td mat-cell *matCellDef="let element"> {{element.amount | currency}} </td>
-      <td mat-footer-cell *matFooterCellDef>{{this.balanceStorage.totalAmount() | currency}}</td>
+      <td mat-footer-cell *matFooterCellDef>{{totalAmount() | currency}}</td>
     </ng-container>
   
     <!-- Balance Column -->
     <ng-container matColumnDef="balance">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance"> Balance </th>
       <td mat-cell *matCellDef="let element"> {{element.balance | currency}} </td>
-      <td mat-footer-cell *matFooterCellDef>{{this.balanceStorage.totalBalance() | currency}}</td>
+      <td mat-footer-cell *matFooterCellDef>{{totalBalance() | currency}}</td>
     </ng-container>
   
    <!-- Current Balance Column -->
@@ -72,7 +72,7 @@
           <mat-icon aria-hidden="false" aria-label="icon" fontIcon="close"></mat-icon>
         }
        </td>
-       <td mat-footer-cell *matFooterCellDef>{{this.balanceStorage.totalNoFree()}} no free</td>
+       <td mat-footer-cell *matFooterCellDef>{{totalNoFree()}} no free</td>
       </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

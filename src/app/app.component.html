@@ -2,12 +2,13 @@
   Rachadinha {{version}} for Embiro created by Surungo</div>
 <div class="fixed-bottom">
   <br>
+  @if(showDevMode()) {
   <mat-form-field appearance="outline" class="fields">
     <mat-label>idbalance</mat-label>
-    <input  [formControl]="idbalance" matInput placeholder="">
+    <input  [formControl]="idbalance" matInput placeholder="" >
     <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
   </mat-form-field>
-
+  }
   <mat-form-field appearance="outline" class="fields">
     <mat-label>Name</mat-label>
     <input  [formControl]="name" matInput placeholder="">

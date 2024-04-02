@@ -1,3 +1,4 @@
+import { RefundService } from './../../service/refund/refund.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { AfterViewInit, Component, ViewChild} from '@angular/core';
 import { Refund } from '../../model/refund';
@@ -22,7 +23,8 @@ export class RefundComponent implements AfterViewInit{
   
   constructor(
     private _liveAnnouncer: LiveAnnouncer,
-    public refundStorage: RefundStorage
+    public refundStorage: RefundStorage,
+    public refundService: RefundService,
     ){
       this.refundStorage.loadData();
   }
@@ -64,6 +66,10 @@ export class RefundComponent implements AfterViewInit{
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.refundStorage.refund_selection().isSelected(row) ? 'deselect' : 'select'} row ${row.idrefund + 1}`;
+  }
+
+  totalAmount(): string|number {
+    return this.refundService.totalAmount();
   }
   
 }
