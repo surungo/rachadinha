@@ -27,13 +27,23 @@
   </mat-form-field>
   <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
   <br>
-  <button mat-raised-button [hidden]="hiddenClearFiels()" 
-  (click)="btnAddData()">Add amount</button>
-  <button mat-raised-button [hidden]="hiddenClearFiels()" 
-  (click)="btnDecreaseData()">Decrease amount</button>
-  
   <button mat-raised-button [hidden]="hiddenEditItem()" 
   (click)="btnEditItem()">Edit select itens</button>
+  @if(!hiddenClearFiels()) {
+    @if(showNew()){
+      <button mat-raised-button  
+      (click)="btnSubstData()">New amount</button>
+    }
+    @else{
+      <button mat-raised-button 
+      (click)="btnSubstData()">Subst amount</button>
+      <button mat-raised-button 
+      (click)="btnAddData()">Add amount</button>
+      <button mat-raised-button 
+      (click)="btnDecreaseData()">Decrease amount</button>
+    }
+  } 
+
   <button mat-raised-button [hidden]="hiddenNotSelected()" 
   (click)="btnRemoveItem()">Remove select itens</button>
   <button mat-raised-button [hidden]="hiddenClearFiels()" 
@@ -42,7 +52,7 @@
   
  
 </div>
-
+@if(isMobile){
 <mat-tab-group>
   <mat-tab label="Balance">
     
@@ -61,6 +71,27 @@
   </mat-tab>  
  
 </mat-tab-group>
+}
+@else {
+  <table width="100%">
+    <tr>
+      <td align="center">
+        Balance
+      </td>
+      <td align="center">
+        Refund
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <app-balance-component />
+      </td>
+      <td>
+        <app-refund-component />
+      </td>
+    </tr>
+  </table>
+}
 <br>
 <br>
 <button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
