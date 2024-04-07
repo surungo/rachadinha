@@ -26,7 +26,8 @@ export class AppComponent {
 
   ) { }
 
-  public version = "v1.1.0 b24-04-01.22";
+  public version = "v1.1.1 b24-04-06.19";
+  public isMobile = window.innerWidth < 768;
 
   idbalance = new FormControl(this.balanceStorage.idbalance());
   name = new FormControl(this.balanceStorage.name());
@@ -35,7 +36,10 @@ export class AppComponent {
   add_balance: Balance = new Balance();
   
   showDevMode(){
-    return false;
+    return true;
+  }
+  showNew(): boolean {
+    return this.idbalance.value == 0;
   }
 
   hiddenClearFiels(): boolean {
@@ -51,8 +55,20 @@ export class AppComponent {
     const numSelected = this.balanceStorage.balance_selection().selected.length;
     return numSelected != 1;
   }
+  btnSubstData() {
+    this.updatebalance(true,true);    
+    this.btnClearFields();
+  }
 
   btnAddData() {
+    this.updatebalance(true,false);
+  }
+  
+  btnDecreaseData() {
+    this.updatebalance(false,false);
+  }
+
+  updatebalance(add: boolean,subst: boolean){
     let name = String(this.name.value);
     if (name.trim() == "") {
       alert("Preencha um nome");
@@ -62,27 +78,13 @@ export class AppComponent {
     this.add_balance.idbalance = Number(this.idbalance.value);
     this.add_balance.name = name;
     this.add_balance.amount = Number(this.amount.value);
+    if(!add){
+      this.add_balance.amount=this.add_balance.amount*-1;
+    }
     this.add_balance.free = Boolean(this.free.value);
-    this.balanceStorage.addData(this.add_balance);
+    this.balanceStorage.addData(this.add_balance,subst);
     this.refundService.resolve();
     this.updateFields();
-    this.balanceStorage.amount.set(0);
-    this.amount.setValue(this.balanceStorage.amount());
-    
-  }
-  btnDecreaseData() {
-    let name = String(this.name.value);
-    if (name.trim() == "") {
-      alert("Preencha um nome");
-      return;
-    }
-    this.add_balance = new Balance();
-    this.add_balance.idbalance = Number(this.idbalance.value);
-    this.add_balance.name = name;
-    this.add_balance.amount = Number(this.amount.value);
-    this.add_balance.free = Boolean(this.free.value);
-    this.balanceStorage.decreaseData(this.add_balance);
-    this.refundService.resolve();
     this.balanceStorage.amount.set(0);
     this.amount.setValue(this.balanceStorage.amount());
   }
