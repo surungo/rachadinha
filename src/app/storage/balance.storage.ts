@@ -38,27 +38,8 @@ export class BalanceStorage {
         this.balance_dataSource.set(new MatTableDataSource(this.balance_dataToDisplay()));
         return this.balance_dataToDisplay();
     }
-    decreaseData(value: Balance) {
-        this.balance.set(value);
-        if(this.balance().idbalance>0){
-            this.balance_dataToDisplay.set(this.storageService.get(this.nmDataBalance));
-            this.balance.set(this.validName(this.balance()));
-            this.balance_dataToDisplay().forEach((value, index) => {
-                if (value.idbalance == this.balance().idbalance){
-                value.idbalance=this.balance().idbalance;
-                value.name=this.balance().name;
-                value.amount=value.amount-this.balance().amount;
-                value.free=this.balance().free;
-                }
-            });
-            this.balance_dataSource().data = this.balance_dataToDisplay();
-            this.balance_selection().clear();
-            this.storageService.set(this.nmDataBalance, this.balance_dataToDisplay());
-            this.loadBalanceData();
-
-        }
-    }
-    addData(value: Balance) {
+    
+    addData(value: Balance, subst: boolean) {
         let count = 1;
         let idbalance = 0;
         this.balance.set(value);
@@ -72,7 +53,11 @@ export class BalanceStorage {
                 if (value.idbalance == this.balance().idbalance){
                   value.idbalance=this.balance().idbalance;
                   value.name=this.balance().name;
-                  value.amount+=this.balance().amount;
+                  if(subst){
+                    value.amount    =this.balance().amount;
+                  }else{
+                    value.amount+=this.balance().amount;
+                  }
                   value.free=this.balance().free;
                 }
             });
