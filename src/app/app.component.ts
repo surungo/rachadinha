@@ -36,7 +36,7 @@ export class AppComponent {
   add_balance: Balance = new Balance();
   
   showDevMode(){
-    return true;
+    return false;
   }
   showNew(): boolean {
     return this.idbalance.value == 0;
