@@ -1,0 +1,22 @@
+{
+  "balanceData": [
+    {
+      "idbalance": 1,
+      "name": "josé",
+      "amount": 10,
+      "free": false
+    },
+    {
+      "idbalance": 2,
+      "name": "pedro",
+      "amount": 30,
+      "free": false
+    },
+    {
+      "idbalance": 3,
+      "name": "carlos",
+      "amount": 25,
+      "free": true
+    }
+  ]
+}

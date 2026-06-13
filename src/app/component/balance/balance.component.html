@@ -29,42 +29,42 @@
   
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Name </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> {{translation.translate('nameLabel')}} </th>
       <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      <td mat-footer-cell *matFooterCellDef>{{totalForPerson() | currency}} for person</td>
+      <td mat-footer-cell *matFooterCellDef>{{translation.translate('currencyPrefix')}}{{totalForPerson() | number:'1.2-2'}} {{translation.translate('forPerson')}}  </td>
     </ng-container>
   
     <!-- Amount Column -->
     <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by amount"> Amount </th>
-      <td mat-cell *matCellDef="let element"> {{element.amount | currency}} </td>
-      <td mat-footer-cell *matFooterCellDef>{{totalAmount() | currency}}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by amount"> {{translation.translate('amountLabel')}} </th>
+      <td mat-cell *matCellDef="let element"> {{translation.translate('currencyPrefix')}}{{element.amount | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef>{{translation.translate('currencyPrefix')}}{{totalAmount() | number:'1.2-2'}}</td>
     </ng-container>
   
     <!-- Balance Column -->
     <ng-container matColumnDef="balance">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance"> Balance </th>
-      <td mat-cell *matCellDef="let element"> {{element.balance | currency}} </td>
-      <td mat-footer-cell *matFooterCellDef>{{totalBalance() | currency}}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance"> {{translation.translate('balanceLabel')}} </th>
+      <td mat-cell *matCellDef="let element"> {{translation.translate('currencyPrefix')}}{{element.balance | number:'1.2-2'}} </td>
+      <td mat-footer-cell *matFooterCellDef>{{translation.translate('currencyPrefix')}}{{totalBalance() | number:'1.2-2'}}</td>
     </ng-container>
   
    <!-- Current Balance Column -->
    <ng-container matColumnDef="current_balance">
     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance">Current Balance </th>
-    <td mat-cell *matCellDef="let element"> {{element.current_balance | currency}} </td>
+    <td mat-cell *matCellDef="let element"> {{translation.translate('currencyPrefix')}}{{element.current_balance | number:'1.2-2'}} </td>
     <td mat-footer-cell *matFooterCellDef>-</td>
   </ng-container>
 
   <!-- Positive Current Balance Column -->
     <ng-container matColumnDef="positive_balance">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by positive_balance"> Positive Balance </th>
-      <td mat-cell *matCellDef="let element">{{element.positive_balance | currency}}</td>
+      <td mat-cell *matCellDef="let element">{{translation.translate('currencyPrefix')}}{{element.positive_balance | number:'1.2-2'}}</td>
       <td mat-footer-cell *matFooterCellDef>0</td>
     </ng-container>
 
     <!-- Free Column -->
     <ng-container matColumnDef="free">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by free"> Free </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by free"> {{translation.translate('freeLabel')}} </th>
       <td mat-cell *matCellDef="let element"> 
         @if (element.free) {
           <mat-icon aria-hidden="false" aria-label="icon" fontIcon="done"></mat-icon>
@@ -72,7 +72,7 @@
           <mat-icon aria-hidden="false" aria-label="icon" fontIcon="close"></mat-icon>
         }
        </td>
-       <td mat-footer-cell *matFooterCellDef>{{totalNoFree()}} no free</td>
+       <td mat-footer-cell *matFooterCellDef>{{totalNoFree()}} {{translation.translate('noFreeLabel')}}</td>
       </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

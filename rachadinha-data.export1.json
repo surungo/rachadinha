@@ -1,0 +1,81 @@
+{
+  "balanceData": [
+    {
+      "idbalance": 1,
+      "name": "j",
+      "amount": 10,
+      "free": false,
+      "balance": -22.5,
+      "current_balance": -22.5,
+      "positive_balance": 22.5
+    },
+    {
+      "idbalance": 2,
+      "name": "asdasd",
+      "amount": 30,
+      "free": false,
+      "balance": -2.5,
+      "current_balance": -2.5,
+      "positive_balance": 2.5
+    },
+    {
+      "idbalance": 3,
+      "name": "dfsd",
+      "amount": 25,
+      "free": true,
+      "balance": 25,
+      "current_balance": 25,
+      "positive_balance": 25
+    }
+  ],
+  "refundData": [
+    {
+      "payee": {
+        "idbalance": 3,
+        "name": "dfsd",
+        "amount": 25,
+        "free": true,
+        "balance": 25,
+        "current_balance": 0,
+        "positive_balance": 0
+      },
+      "payer": {
+        "idbalance": 2,
+        "name": "asdasd",
+        "amount": 30,
+        "free": false,
+        "balance": -2.5,
+        "current_balance": 0,
+        "positive_balance": 0
+      },
+      "amount": 2.5,
+      "current_balance": 0,
+      "positive_balance": 65,
+      "idrefund": 2
+    },
+    {
+      "payee": {
+        "idbalance": 3,
+        "name": "dfsd",
+        "amount": 25,
+        "free": true,
+        "balance": 25,
+        "current_balance": 0,
+        "positive_balance": 0
+      },
+      "payer": {
+        "idbalance": 1,
+        "name": "j",
+        "amount": 10,
+        "free": false,
+        "balance": -22.5,
+        "current_balance": 0,
+        "positive_balance": 0
+      },
+      "amount": 22.5,
+      "current_balance": 0,
+      "positive_balance": 65,
+      "idrefund": 1
+    }
+  ]
+}

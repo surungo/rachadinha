@@ -1,99 +1,92 @@
-<div style="width: 98%;text-align: right;">
-  Rachadinha {{version}} for Embiro created by Surungo</div>
+<div style="width: 98%;text-align: right; display: flex; justify-content: space-between; align-items: center;">
+  <span>{{translation.translate('appTitle')}} {{version}} {{translation.translate('createdBy')}}</span>
+  <span>
+    <label for="languageSelect">{{translation.translate('languageLabel')}}:</label>
+    <select id="languageSelect" [value]="translation.language()" (change)="setLanguage($any($event.target).value)">
+      <option value="pt">Português</option>
+      <option value="en">English</option>
+    </select>
+  </span>
+</div>
 <div class="fixed-bottom">
   <br>
-  @if(showDevMode()) {
+  <ng-container *ngIf="showDevMode()">
+    <mat-form-field appearance="outline" class="fields">
+      <mat-label>{{translation.translate('idbalanceLabel')}}</mat-label>
+      <input [formControl]="idbalance" matInput placeholder="" >
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+    </mat-form-field>
+  </ng-container>
   <mat-form-field appearance="outline" class="fields">
-    <mat-label>idbalance</mat-label>
-    <input  [formControl]="idbalance" matInput placeholder="" >
-    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-  </mat-form-field>
-  }
-  <mat-form-field appearance="outline" class="fields">
-    <mat-label>Name</mat-label>
+    <mat-label>{{translation.translate('nameLabel')}}</mat-label>
     <input  [formControl]="name" matInput placeholder="">
     <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
   </mat-form-field>
   <mat-form-field appearance="outline" class="fields amount-form-field">
-    <mat-label>Amount</mat-label>
+    <mat-label>{{translation.translate('amountLabel')}}</mat-label>
 
-    <input  [formControl]="amount" 
-    currencyMask
-    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
-      matInput 
-    type="text" 
-    class="main-right-align"
-    placeholder="0">
+    <input [formControl]="amount"
+      currencyMask
+      [options]="{ prefix: translation.translate('currencyPrefix'), thousands: '.', decimal: ',' }"
+      matInput
+      type="text"
+      class="main-right-align"
+      placeholder="0">
   </mat-form-field>
-  <mat-slide-toggle [formControl]="free">Free</mat-slide-toggle>
+  <mat-slide-toggle [formControl]="free">{{translation.translate('freeLabel')}}</mat-slide-toggle>
   <br>
   <button mat-raised-button [hidden]="hiddenEditItem()" 
-  (click)="btnEditItem()">Edit select itens</button>
-  @if(!hiddenClearFiels()) {
-    @if(showNew()){
-      <button mat-raised-button  
-      (click)="btnSubstData()">New amount</button>
-    }
-    @else{
-      <button mat-raised-button 
-      (click)="btnSubstData()">Subst amount</button>
-      <button mat-raised-button 
-      (click)="btnAddData()">Add amount</button>
-      <button mat-raised-button 
-      (click)="btnDecreaseData()">Decrease amount</button>
-    }
-  } 
+  (click)="btnEditItem()">{{translation.translate('editSelectItemsButton')}}</button>
+  <ng-container *ngIf="!hiddenClearFiels()">
+    <ng-container *ngIf="showNew(); else substituteButtons">
+      <button mat-raised-button (click)="btnSubstData()">{{translation.translate('newAmountButton')}}</button>
+    </ng-container>
+    <ng-template #substituteButtons>
+      <button mat-raised-button (click)="btnSubstData()">{{translation.translate('substAmountButton')}}</button>
+      <button mat-raised-button (click)="btnAddData()">{{translation.translate('addAmountButton')}}</button>
+      <button mat-raised-button (click)="btnDecreaseData()">{{translation.translate('decreaseAmountButton')}}</button>
+    </ng-template>
+  </ng-container>
 
   <button mat-raised-button [hidden]="hiddenNotSelected()" 
-  (click)="btnRemoveItem()">Remove select itens</button>
+  (click)="btnRemoveItem()">{{translation.translate('removeSelectItemsButton')}}</button>
   <button mat-raised-button [hidden]="hiddenClearFiels()" 
-  (click)="btnClearFields()">Clear fields</button>
- 
-  
- 
+  (click)="btnClearFields()">{{translation.translate('clearFieldsButton')}}</button>
+  <br>
+  <button mat-raised-button (click)="exportDataAsJson()">{{translation.translate('exportJsonButton')}}</button>
+  <button mat-raised-button (click)="jsonFileInput.click()">{{translation.translate('importJsonButton')}}</button>
+  <input type="file" #jsonFileInput accept=".json,application/json" hidden (change)="onJsonFileSelected($event)">
 </div>
-@if(isMobile){
-<mat-tab-group>
-  <mat-tab label="Balance">
-    
-    <br>
-    <br>
-    <app-balance-component />
-  
-  </mat-tab>
-
-  <mat-tab label="Refund"> 
- 
-    <br>
-    <br>
-    <app-refund-component />
-    
-  </mat-tab>  
- 
-</mat-tab-group>
-}
-@else {
+<ng-container *ngIf="isMobile; else desktopLayout">
+  <mat-tab-group>
+    <mat-tab label="{{translation.translate('balanceTab')}}">
+      <br>
+      <br>
+      <app-balance-component></app-balance-component>
+    </mat-tab>
+    <mat-tab label="{{translation.translate('refundTab')}}">
+      <br>
+      <br>
+      <app-refund-component></app-refund-component>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>
+<ng-template #desktopLayout>
   <table width="100%">
     <tr>
-      <td align="center">
-        Balance
-      </td>
-      <td align="center">
-        Refund
-      </td>
+      <td align="center">{{translation.translate('balanceHeader')}}</td>
+      <td align="center">{{translation.translate('refundHeader')}}</td>
     </tr>
     <tr>
-      <td>
-        <app-balance-component />
-      </td>
-      <td>
-        <app-refund-component />
-      </td>
+      <td><app-balance-component></app-balance-component></td>
+      <td><app-refund-component></app-refund-component></td>
     </tr>
   </table>
-}
+</ng-template>
 <br>
 <br>
-<button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">Clear table</button>
+<ng-container *ngIf="showDevMode()">
+<button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnRemoveData()">{{translation.translate('clearTableButton')}}</button>
 <br>
-<button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnSolverRefund()">Solver Refund</button>  
+<button mat-raised-button [hidden]="balanceStorage.balance_dataToDisplay().length<=0" (click)="btnSolverRefund()">{{translation.translate('solveRefundButton')}}</button>   
+</ng-container>

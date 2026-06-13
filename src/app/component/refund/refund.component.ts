@@ -4,6 +4,7 @@ import { AfterViewInit, Component, ViewChild} from '@angular/core';
 import { Refund } from '../../model/refund';
 import { MatSort, Sort } from '@angular/material/sort';
 import { RefundStorage } from '../../storage/refund.storage';
+import { TranslationService } from '../../service/translation.service';
 
 @Component({
   selector: 'app-refund-component',
@@ -25,6 +26,7 @@ export class RefundComponent implements AfterViewInit{
     private _liveAnnouncer: LiveAnnouncer,
     public refundStorage: RefundStorage,
     public refundService: RefundService,
+    public translation: TranslationService
     ){
       this.refundStorage.loadData();
   }
@@ -63,9 +65,9 @@ export class RefundComponent implements AfterViewInit{
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: Refund): string {
     if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+      return `${this.isAllSelected() ? this.translation.translate('deselect') : this.translation.translate('select')} ${this.translation.translate('all')}`;
     }
-    return `${this.refundStorage.refund_selection().isSelected(row) ? 'deselect' : 'select'} row ${row.idrefund + 1}`;
+    return `${this.refundStorage.refund_selection().isSelected(row) ? this.translation.translate('deselect') : this.translation.translate('select')} ${this.translation.translate('row')} ${row.idrefund + 1}`;
   }
 
   totalAmount(): string|number {
