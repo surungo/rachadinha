@@ -22,11 +22,18 @@ export default class BalanceService {
     { amount: 400,  balance:  0.00  , positive_balance: 0.00  , current_balance:  0.00  , free: false , recap:  false , idbalance:  11 , name: "Sodium" },
 
   ];
+  
+  public isDevMode = false;
+  public versionClickCount = 0;
 
   constructor(
     private balanceStorage: BalanceStorage,
     private utilService: UtilService,
   ) { }
+
+  public showDevMode(){
+    return this.isDevMode;
+  }
 
   addBalancesTest() {
     this.balanceStorage.saveBalanceData(this.BALANCE_DATA);

@@ -1,5 +1,5 @@
 <div style="width: 98%;text-align: right; display: flex; justify-content: space-between; align-items: center;">
-  <span>{{translation.translate('appTitle')}} {{version}} {{translation.translate('createdBy')}}</span>
+  <span>{{translation.translate('appTitle')}} <span class="version-clickable" (click)="onVersionClick()">{{version}}</span> {{translation.translate('createdBy')}}</span>
   <span>
     <label for="languageSelect">{{translation.translate('languageLabel')}}:</label>
     <select id="languageSelect" [value]="translation.language()" (change)="setLanguage($any($event.target).value)">

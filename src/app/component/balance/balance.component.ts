@@ -13,6 +13,8 @@ import { TranslationService } from '../../service/translation.service';
 })
 export class BalanceComponent implements AfterViewInit {
 
+  public isDevMode = false;
+  public versionClickCount = 0;
 
   displayedColumns: string[] = ['select', 'name', 'amount', 'balance'
   //, 'current_balance'
@@ -32,9 +34,6 @@ export class BalanceComponent implements AfterViewInit {
   sort!: MatSort;
   ngAfterViewInit(): void {
     this.balanceStorage.balance_dataSource().sort = this.sort;
-  }
-  showDevMode(){
-    return false;
   }
   
   announceSortChange(sortState: Sort) {

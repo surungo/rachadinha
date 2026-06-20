@@ -44,13 +44,8 @@ export class RefundService {
         });
    
     });
-
-    
-   
-    
     return refund_dataToDisplay;
   }
-
 
   resolve() {
     if(this.balanceStorage.balance_dataToDisplay().length<2)return;
@@ -61,11 +56,9 @@ export class RefundService {
       refund_dataToDisplay=this.payFirst(refund_dataToDisplay);
       count++;
     }
-    
-    
     this.refundStorage.saveRefundData(refund_dataToDisplay);
-
   }
+
   existsRecap(refund_dataToDisplay: Refund[]) {
     return refund_dataToDisplay.filter((e, i) =>
         e.payee.current_balance > 0 || 

@@ -36,7 +36,7 @@ export class AppComponent {
   add_balance: Balance = new Balance();
   
   showDevMode(){
-    return false;
+    return this.balanceService.showDevMode();
   }
   showNew(): boolean {
     return this.idbalance.value == 0;
@@ -148,6 +148,9 @@ export class AppComponent {
   }
 
   onJsonFileSelected(event: Event) {
+    this.balanceStorage.removeData();
+    this.refundStorage.removeData();
+    
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) {
       return;
@@ -170,6 +173,8 @@ export class AppComponent {
       } catch (error) {
         alert('JSON inválido');
       }
+      this.refundService.resolve();
+
     };
     reader.readAsText(file);
   }
@@ -177,6 +182,14 @@ export class AppComponent {
   btnAddBalancesTest() {
     this.balanceService.addBalancesTest();
     this.balanceService.resetBalance();
+  }
+
+  onVersionClick() {
+    this.balanceService.versionClickCount += 1;
+    if (this.balanceService.versionClickCount >= 5) {
+      this.balanceService.isDevMode = !this.balanceService.isDevMode;
+      this.balanceService.versionClickCount = 0;
+    }
   }
 
 }
