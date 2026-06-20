@@ -4,6 +4,7 @@ import { Balance } from '../../model/balance';
 import { MatSort, Sort } from '@angular/material/sort';
 import { BalanceStorage } from '../../storage/balance.storage';
 import BalanceService from '../../service/balance/balance.service';
+import { TranslationService } from '../../service/translation.service';
 
 @Component({
   selector: 'app-balance-component',
@@ -12,6 +13,8 @@ import BalanceService from '../../service/balance/balance.service';
 })
 export class BalanceComponent implements AfterViewInit {
 
+  public isDevMode = false;
+  public versionClickCount = 0;
 
   displayedColumns: string[] = ['select', 'name', 'amount', 'balance'
   //, 'current_balance'
@@ -22,6 +25,7 @@ export class BalanceComponent implements AfterViewInit {
     private _liveAnnouncer: LiveAnnouncer,
     public balanceStorage: BalanceStorage,
     private balanceService: BalanceService,
+    public translation: TranslationService
   ) {
     this.balanceService.loadData();
   }
@@ -30,9 +34,6 @@ export class BalanceComponent implements AfterViewInit {
   sort!: MatSort;
   ngAfterViewInit(): void {
     this.balanceStorage.balance_dataSource().sort = this.sort;
-  }
-  showDevMode(){
-    return false;
   }
   
   announceSortChange(sortState: Sort) {
@@ -63,9 +64,9 @@ export class BalanceComponent implements AfterViewInit {
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: Balance): string {
     if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+      return `${this.isAllSelected() ? this.translation.translate('deselect') : this.translation.translate('select')} ${this.translation.translate('all')}`;
     }
-    return `${this.balanceStorage.balance_selection().isSelected(row) ? 'deselect' : 'select'} row ${row.idbalance + 1}`;
+    return `${this.balanceStorage.balance_selection().isSelected(row) ? this.translation.translate('deselect') : this.translation.translate('select')} ${this.translation.translate('row')} ${row.idbalance + 1}`;
   }
 
   totalBalance(): string|number {

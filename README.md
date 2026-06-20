@@ -29,3 +29,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Sample
 [https://apps.surungo.com.br/rachadinha/](https://apps.surungo.com.br/rachadinha/)
 ![chrome_qrcode_1711909084047.png](chrome_qrcode_1711909084047.png)
+
+
+Release notes
+
+multilingual
+import export data

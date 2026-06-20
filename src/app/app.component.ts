@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
 import { Balance } from './model/balance';
@@ -6,14 +6,13 @@ import { RefundStorage } from './storage/refund.storage';
 import { BalanceStorage } from './storage/balance.storage';
 import BalanceService from './service/balance/balance.service';
 import { RefundService } from './service/refund/refund.service';
+import { TranslationService } from './service/translation.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
-
-
 
 export class AppComponent {
 
@@ -23,6 +22,7 @@ export class AppComponent {
     private refundService: RefundService,
     public balanceStorage: BalanceStorage,
     private balanceService: BalanceService,
+    public translation: TranslationService
 
   ) { }
 
@@ -36,7 +36,7 @@ export class AppComponent {
   add_balance: Balance = new Balance();
   
   showDevMode(){
-    return false;
+    return this.balanceService.showDevMode();
   }
   showNew(): boolean {
     return this.idbalance.value == 0;
@@ -71,7 +71,7 @@ export class AppComponent {
   updatebalance(add: boolean,subst: boolean){
     let name = String(this.name.value);
     if (name.trim() == "") {
-      alert("Preencha um nome");
+      alert(this.translation.translate('emptyNameAlert'));
       return;
     }
     this.add_balance = new Balance();
@@ -91,6 +91,7 @@ export class AppComponent {
 
   btnRemoveItem() {
     this.balanceStorage.removeItem()
+    this.refundService.resolve();
   }
 
   btnRemoveData() {
@@ -114,6 +115,10 @@ export class AppComponent {
     this.updateFields();
   }
 
+  setLanguage(language: 'pt' | 'en') {
+    this.translation.setLanguage(language);
+  }
+
   updateFields(){
     this.idbalance.setValue(this.balanceStorage.idbalance());
     this.name.setValue(this.balanceStorage.name());
@@ -127,9 +132,64 @@ export class AppComponent {
     this.refundService.allRefunds();
   }
 
+  exportDataAsJson() {
+    const data = {
+      balanceData: this.balanceStorage.balance_dataToDisplay(),
+      refundData: this.refundStorage.refund_dataToDisplay()
+    };
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'rachadinha-data.json';
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
+  onJsonFileSelected(event: Event) {
+    this.balanceStorage.removeData();
+    this.refundStorage.removeData();
+    
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result as string);
+        if (parsed.balanceData && Array.isArray(parsed.balanceData)) {
+          this.balanceStorage.saveBalanceData(parsed.balanceData);
+        }
+        if (parsed.refundData && Array.isArray(parsed.refundData)) {
+          this.refundStorage.saveRefundData(parsed.refundData);
+        }
+        this.balanceStorage.loadBalanceData();
+        this.refundStorage.loadData();
+        input.value = '';
+      } catch (error) {
+        alert('JSON inválido');
+      }
+      this.refundService.resolve();
+
+    };
+    reader.readAsText(file);
+  }
+
   btnAddBalancesTest() {
     this.balanceService.addBalancesTest();
     this.balanceService.resetBalance();
+  }
+
+  onVersionClick() {
+    this.balanceService.versionClickCount += 1;
+    if (this.balanceService.versionClickCount >= 5) {
+      this.balanceService.isDevMode = !this.balanceService.isDevMode;
+      this.balanceService.versionClickCount = 0;
+    }
   }
 
 }
